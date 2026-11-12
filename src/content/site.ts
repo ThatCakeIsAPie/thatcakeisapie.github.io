@@ -2,8 +2,7 @@
  * All copy and links for the site live in this one file.
  * Edit text here; components never contain wording.
  *
- * Fields marked `// PLACEHOLDER` are lorem ipsum waiting for real copy.
- * Everything else is real and final.
+ * All copy is real and final; no placeholder text remains.
  */
 import type { ImageMetadata } from 'astro';
 
@@ -14,6 +13,9 @@ export interface Social {
 	name: string;
 	handle: string;
 	href: string;
+	/** Highlighted in the contact section: listed first, with a boxed `featuredLabel` tag. */
+	featured?: boolean;
+	featuredLabel?: string;
 }
 
 export interface AffiliateLink {
@@ -100,7 +102,7 @@ export const site = {
 	},
 
 	socials: [
-		{ id: 'x', name: 'X', handle: '@LyleBCole', href: 'https://x.com/LyleBCole' },
+		{ id: 'x', name: 'X', handle: '@LyleBCole', href: 'https://x.com/LyleBCole', featured: true, featuredLabel: 'MOST ACTIVE' },
 		{
 			id: 'instagram',
 			name: 'Instagram',
@@ -130,31 +132,26 @@ export const site = {
 	story: {
 		id: 'story',
 		label: 'My story',
-		// PLACEHOLDER (optional display heading; set to '' to hide)
-		heading: 'Lorem ipsum dolor sit amet consectetur.',
-		// PLACEHOLDER
-		intro:
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
+		/** Optional display heading; '' hides it. */
+		heading: 'I started off wanting to live a pretty normal life.',
+		/** Optional; '' hides it. */
+		intro: '',
 		chapters: [
 			{
-				// PLACEHOLDER
-				title: 'Lorem ipsum',
-				text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam quis nostrud.',
+				title: 'The call',
+				text: 'One day, I saw what I believed to be a great and powerful evil in the world. I didn’t really know Christ at the time, but I knew He had given me gifts for a reason, and that I was going to use them to stand up against what I was witnessing. That was how I realized I needed to be an entrepreneur.',
 			},
 			{
-				// PLACEHOLDER
-				title: 'Dolor sit amet',
-				text: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.',
+				title: 'Texas',
+				text: 'After having my heart broken early on by someone I thought I was going to be with, I moved to Texas for the business opportunities I knew I would find there.',
 			},
 			{
-				// PLACEHOLDER
-				title: 'Consectetur elit',
-				text: 'Sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque.',
+				title: 'The mentor',
+				text: 'There I met the person who would influence my life more than anyone else, a man named Richard. He helped me get a business started and brought me into his mastermind group, where he had learned how to run a business properly and ethically.',
 			},
 			{
-				// PLACEHOLDER
-				title: 'Tempor incididunt',
-				text: 'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi.',
+				title: 'Today',
+				text: 'I still have that business, and I’m still growing it. I’m also a partner in a second business, in the defense industry, and it is doing very well.',
 			},
 		] as Chapter[],
 	},
@@ -202,10 +199,9 @@ export const site = {
 	contact: {
 		id: 'contact',
 		label: 'Get in touch',
-		// PLACEHOLDER (optional display heading; set to '' to hide)
-		heading: 'Lorem ipsum dolor sit amet.',
-		// PLACEHOLDER
-		text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. The quickest way to reach me is through any of the places below.',
+		/** Optional display heading; '' hides it. */
+		heading: '',
+		text: 'If you like what you hear and want to get to know me more, follow me and my work on any of the platforms below. I’m most active on X. Or reach out through the contact form, and I’ll get back to you personally.',
 		form: {
 			// Worker that validates, spam-checks and stores submissions (worker/). The env override is for local previews only.
 			endpoint: import.meta.env.PUBLIC_CONTACT_ENDPOINT || 'https://coleholistics-contact.lylecole.workers.dev/contact',

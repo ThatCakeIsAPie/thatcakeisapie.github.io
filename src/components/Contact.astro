@@ -2,25 +2,34 @@
 import { site } from '../content/site';
 import SectionHeading from './SectionHeading.astro';
 import SocialIcon from './SocialIcon.astro';
+import ContactForm from './ContactForm.astro';
 
 const { id, label, heading, text } = site.contact;
+// Featured platforms (e.g. the one I'm most active on) are listed first; the rest keep their order.
+const socials = [...site.socials].sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
 ---
 
 <section class="contact" id={id} aria-labelledby={`${id}-h`}>
 	<div class="wrap slab glass glass--reading">
 		<SectionHeading label={label} id={`${id}-h`} />
-		<div class="contact__grid">
+		<div class="contact__body">
 			<div class="lede reveal">
 				{heading && <p class="lede__heading">{heading}</p>}
 				<p class="lede__text">{text}</p>
 			</div>
+			<div class="contact__form reveal">
+				<ContactForm variant="panel" idPrefix="cfp" />
+			</div>
 			<ul class="links reveal">
 			{
-				site.socials.map((s) => (
+				socials.map((s) => (
 					<li>
 						<a class="link" href={s.href} rel="noopener">
 							<SocialIcon id={s.id} />
-							<span class="link__name">{s.name}</span>
+							<span class="link__name">
+								{s.name}
+								{s.featured && s.featuredLabel && <span class="tag link__tag">{s.featuredLabel}</span>}
+							</span>
 							<span class="link__handle">{s.handle}</span>
 							<svg class="link__arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
 								<path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -38,11 +47,14 @@ const { id, label, heading, text } = site.contact;
 	.contact {
 		margin-bottom: var(--panel-gap);
 	}
-	.contact__grid {
+	/* One column: paragraph, then the form, then the platform list. */
+	.contact__body {
 		display: grid;
-		grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-		gap: clamp(3rem, 8vw, 7rem);
-		align-items: start;
+		grid-template-columns: minmax(0, 1fr);
+		gap: clamp(2rem, 4vw, 3rem);
+	}
+	.contact__form {
+		min-width: 0;
 	}
 	.lede__heading {
 		font-family: var(--font-display);
@@ -89,6 +101,12 @@ const { id, label, heading, text } = site.contact;
 		color: var(--text-bright);
 		transition: color 0.2s ease;
 	}
+	/* The boxed tag sits beside the name and stays on the same line as it. */
+	.link__tag {
+		margin-left: 0.75rem;
+		vertical-align: 0.1em;
+		letter-spacing: 0.16em;
+	}
 	.link__handle {
 		color: var(--text-dim);
 		font-size: 1rem;
@@ -110,12 +128,6 @@ const { id, label, heading, text } = site.contact;
 	}
 	.link:hover .link__arrow {
 		transform: translateX(4px);
-	}
-	@media (max-width: 900px) {
-		.contact__grid {
-			grid-template-columns: minmax(0, 1fr);
-			gap: 2.5rem;
-		}
 	}
 	@media (max-width: 480px) {
 		.link {

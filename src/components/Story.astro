@@ -12,7 +12,7 @@ const numerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 		<div class="story__grid">
 			<div class="lede reveal">
 				{heading && <p class="lede__heading">{heading}</p>}
-				<p class="lede__intro">{intro}</p>
+				{intro && <p class="lede__intro">{intro}</p>}
 			</div>
 			<ol class="path">
 				{
@@ -54,6 +54,10 @@ const numerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 		color: var(--text-bright);
 		text-wrap: balance;
 		margin-bottom: 1.5rem;
+	}
+	/* Heading alone (no intro): no trailing gap. */
+	.lede__heading:last-child {
+		margin-bottom: 0;
 	}
 	.lede__intro {
 		font-size: 1.2rem;

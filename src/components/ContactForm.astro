@@ -1,33 +1,44 @@
 ---
 import { site } from '../content/site';
 
+interface Props {
+	/** `bar`: the compact glass bar on the landing screen. `panel`: bare form for use inside an existing glass panel. */
+	variant?: 'bar' | 'panel';
+	/** Prefix for every id in this instance (inputs, labels, error ids). Must be unique per page. */
+	idPrefix?: string;
+}
+
 const { id, label, form } = site.contact;
+const { variant = 'bar', idPrefix = variant === 'bar' ? 'cf' : 'cfp' } = Astro.props;
+const isBar = variant === 'bar';
+const p = idPrefix;
 const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.turnstileSiteKey, errors: form.errors, sending: form.sending, error: form.error, success: form.success });
 ---
 
-<div class="cbar" id={`${id}-form`} data-contact-form data-config={clientConfig}>
-	<div class="cbar__bar glass glass--reading">
-		<form class="cbar__form" novalidate aria-labelledby="cf-label">
-			<h2 class="cbar__label" id="cf-label">{label}</h2>
+<!-- The landing bar owns `#contact-form` (the phone anchor and other pages link to it); other instances get no such id. -->
+<div class:list={['cbar', `cbar--${variant}`]} id={isBar ? `${id}-form` : undefined} data-contact-form data-config={clientConfig}>
+	<div class:list={['cbar__bar', isBar && 'glass glass--reading']}>
+		<form class="cbar__form" novalidate aria-labelledby={isBar ? `${p}-label` : undefined} aria-label={isBar ? undefined : label}>
+			{isBar && <h2 class="cbar__label" id={`${p}-label`}>{label}</h2>}
 			<div class="field field--name">
-				<label class="sr" for="cf-name">{form.nameLabel}</label>
-				<input id="cf-name" name="name" type="text" autocomplete="name" placeholder={form.nameLabel} required maxlength="100" aria-describedby="cf-name-err" />
+				<label class="sr" for={`${p}-name`}>{form.nameLabel}</label>
+				<input id={`${p}-name`} name="name" type="text" autocomplete="name" placeholder={form.nameLabel} required maxlength="100" aria-describedby={`${p}-name-err`} />
 			</div>
 			<div class="field field--phone">
-				<label class="sr" for="cf-phone">{form.phoneLabel}</label>
-				<input id="cf-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder={form.phoneLabel} required maxlength="40" aria-describedby="cf-phone-err" />
+				<label class="sr" for={`${p}-phone`}>{form.phoneLabel}</label>
+				<input id={`${p}-phone`} name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder={form.phoneLabel} required maxlength="40" aria-describedby={`${p}-phone-err`} />
 			</div>
 			<div class="field field--email">
-				<label class="sr" for="cf-email">{form.emailLabel}</label>
-				<input id="cf-email" name="email" type="email" autocomplete="email" placeholder={form.emailLabel} maxlength="254" aria-describedby="cf-email-err" />
+				<label class="sr" for={`${p}-email`}>{form.emailLabel}</label>
+				<input id={`${p}-email`} name="email" type="email" autocomplete="email" placeholder={form.emailLabel} maxlength="254" aria-describedby={`${p}-email-err`} />
 			</div>
 			<div class="hp" aria-hidden="true">
 				<label>{form.honeypotLabel}<input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
 			</div>
 			<div class="cbar__row2">
 				<div class="field field--message">
-					<label class="sr" for="cf-message">{form.messageLabel}</label>
-					<input id="cf-message" name="message" type="text" autocomplete="off" placeholder={form.messageLabel} required aria-required="true" maxlength="300" aria-describedby="cf-message-err" />
+					<label class="sr" for={`${p}-message`}>{form.messageLabel}</label>
+					<input id={`${p}-message`} name="message" type="text" autocomplete="off" placeholder={form.messageLabel} required aria-required="true" maxlength="300" aria-describedby={`${p}-message-err`} />
 				</div>
 				<button class="cbar__send" type="submit">{form.button}</button>
 			</div>
@@ -39,12 +50,12 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 		</noscript>
 	</div>
 
-	<!-- Messages and the (interaction-only) Turnstile widget live directly under the bar. -->
+	<!-- Messages and the (interaction-only) Turnstile widget live directly under the form. -->
 	<div class="cbar__msgs">
-		<p class="cbar__err" id="cf-name-err" data-err="name" hidden></p>
-		<p class="cbar__err" id="cf-phone-err" data-err="phone" hidden></p>
-		<p class="cbar__err" id="cf-email-err" data-err="email" hidden></p>
-		<p class="cbar__err" id="cf-message-err" data-err="message" hidden></p>
+		<p class="cbar__err" id={`${p}-name-err`} data-err="name" hidden></p>
+		<p class="cbar__err" id={`${p}-phone-err`} data-err="phone" hidden></p>
+		<p class="cbar__err" id={`${p}-email-err`} data-err="email" hidden></p>
+		<p class="cbar__err" id={`${p}-message-err`} data-err="message" hidden></p>
 		<p class="cbar__err" role="alert" data-form-error hidden>{form.error}</p>
 		<div class="cbar__ts" data-turnstile></div>
 	</div>
@@ -271,6 +282,43 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 			padding: 0.5rem 0.25rem 0;
 		}
 	}
+
+	/* ---- variant "panel": sits inside the section's own glass panel (no glass of its own, no label) ---- */
+	.cbar--panel .cbar__bar {
+		padding: 0;
+	}
+	/* Messages stay in the flow, under the form. */
+	.cbar--panel .cbar__msgs {
+		position: static;
+		padding: 0.75rem 0 0;
+	}
+	/* Desktop: Name + Phone + Email on one row, then the message field + Send. */
+	@media (min-width: 901px) {
+		.cbar--panel .cbar__form {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			column-gap: 1rem;
+			row-gap: 0.75rem;
+		}
+		.cbar--panel .cbar__row2 {
+			gap: 1rem;
+		}
+		.cbar--panel .cbar__note {
+			margin-top: 0.1rem;
+		}
+	}
+	/* Phone: same stacking as the bar, but the panel has less side padding to lose than the bar, so the long
+	   placeholder gets its own size curve (about 231px of text at 16px must fit inside the input: full size from ~345px wide). */
+	@media (max-width: 900px) {
+		.cbar--panel .cbar__form {
+			row-gap: 0.6rem;
+		}
+		.cbar--panel .field--message input {
+			font-size: clamp(0.8rem, calc((100vw - 7.6rem) * 0.0693), 1rem);
+		}
+		.cbar--panel .cbar__msgs {
+			padding: 0.6rem 0 0;
+		}
+	}
 </style>
 
 <script>
@@ -280,8 +328,29 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 		reset: (id?: string) => void;
 	};
 
-	const root = document.querySelector<HTMLElement>('[data-contact-form]');
-	if (root) {
+	// Turnstile's API script is requested once per page, however many forms there are and whichever is focused first.
+	let apiLoading: Promise<TS> | null = null;
+	const ts = () => (window as unknown as { turnstile?: TS }).turnstile;
+	function loadApi(): Promise<TS> {
+		if (apiLoading) return apiLoading;
+		apiLoading = new Promise<TS>((resolve, reject) => {
+			const s = document.createElement('script');
+			s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+			s.async = true;
+			s.onload = () => {
+				const t = ts();
+				if (t) resolve(t);
+				else reject(new Error('turnstile'));
+			};
+			s.onerror = () => reject(new Error('turnstile'));
+			document.head.appendChild(s);
+		});
+		apiLoading.catch(() => (apiLoading = null)); // allow a retry on the next focus or submit
+		return apiLoading;
+	}
+
+	// Each [data-contact-form] instance is independent: own state, timer, Turnstile widget and token, status swap.
+	function init(root: HTMLElement) {
 		const cfg: Cfg = JSON.parse(root.dataset.config || '{}');
 		const form = root.querySelector<HTMLFormElement>('form')!;
 		const button = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
@@ -335,39 +404,28 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 		let widgetId: string | undefined;
 		let token = '';
 		let waiter: ((t: string) => void) | null = null;
-		const ts = () => (window as unknown as { turnstile?: TS }).turnstile;
-
+		// This instance's widget: rendered once the (shared) API script is there.
 		function loadTurnstile(): Promise<void> {
 			if (loading) return loading;
 			if (!startedAt) startedAt = Date.now();
-			loading = new Promise<void>((resolve, reject) => {
-				const s = document.createElement('script');
-				s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
-				s.async = true;
-				s.onload = () => {
-					const t = ts();
-					if (!t) return reject(new Error('turnstile'));
-					widgetId = t.render(box, {
-						sitekey: cfg.siteKey,
-						action: 'contact',
-						theme: 'dark',
-						appearance: 'interaction-only',
-						callback: (t2: string) => {
-							token = t2;
-							waiter?.(t2);
-							waiter = null;
-						},
-						'expired-callback': () => {
-							token = '';
-						},
-						'error-callback': () => {
-							token = '';
-						},
-					});
-					resolve();
-				};
-				s.onerror = () => reject(new Error('turnstile'));
-				document.head.appendChild(s);
+			loading = loadApi().then((t) => {
+				widgetId = t.render(box, {
+					sitekey: cfg.siteKey,
+					action: 'contact',
+					theme: 'dark',
+					appearance: 'interaction-only',
+					callback: (t2: string) => {
+						token = t2;
+						waiter?.(t2);
+						waiter = null;
+					},
+					'expired-callback': () => {
+						token = '';
+					},
+					'error-callback': () => {
+						token = '';
+					},
+				});
 			});
 			loading.catch(() => (loading = null)); // allow a retry on the next focus or submit
 			return loading;
@@ -450,4 +508,5 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 
 		for (const f of fields) input(f).addEventListener('input', () => errEl(f).hidden || show(f, null));
 	}
+	document.querySelectorAll<HTMLElement>('[data-contact-form]').forEach(init);
 </script>
