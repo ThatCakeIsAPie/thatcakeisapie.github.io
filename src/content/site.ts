@@ -196,7 +196,7 @@ export const site = {
 				link: '/faleth/',
 			},
 		] as Project[],
-		linkLabel: 'Visit',
+		linkLabel: 'Faleth Capital',
 	},
 
 	contact: {
