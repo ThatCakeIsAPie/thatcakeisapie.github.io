@@ -20,6 +20,8 @@ export interface AffiliateLink {
 	title: string;
 	description: string;
 	href: string;
+	/** Optional key into `landing.groups`. Consecutive links with the same key are bracketed together. */
+	group?: string;
 }
 
 export interface Chapter {
@@ -80,13 +82,19 @@ export const site = {
 				title: 'Avellum Health',
 				description: 'Where I get my bloodwork and peptides.',
 				href: 'https://www.avellumhealth.com/',
+				group: 'discounts',
 			},
 			{
 				title: 'Valdura',
 				description: 'How I monitor my health.',
 				href: 'https://www.valdura.health/',
+				group: 'discounts',
 			},
 		] as AffiliateLink[],
+		/** Notes for bracketed groups of links (see `group` on a link). */
+		groups: {
+			discounts: { note: 'Ask me for discounts' },
+		} as Record<string, { note: string }>,
 		/** Set to '' to hide. */
 		affiliateNote: 'I may earn from some of these links.',
 		findLabel: 'Find me',
@@ -262,7 +270,7 @@ export const site = {
 		closing: {
 			text: 'The business conversation comes only if you ask, and always privately.',
 			linkLabel: 'Get in touch',
-			href: '/#contact',
+			href: '/#contact-form',
 		},
 	},
 
