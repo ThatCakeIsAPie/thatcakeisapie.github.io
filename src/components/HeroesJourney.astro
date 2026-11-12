@@ -1,0 +1,126 @@
+---
+import { site } from '../content/site';
+import SectionHeading from './SectionHeading.astro';
+
+const { label, intro, stages } = site.heroes.journey;
+const numerals = ['I', 'II', 'III', 'IV'];
+---
+
+<section class="journey" aria-labelledby="journey-h">
+	<div class="wrap slab glass glass--reading">
+		<SectionHeading label={label} id="journey-h" />
+		<p class="journey__intro reveal">{intro}</p>
+		<ol class="path journey__path">
+			{
+				stages.map((s, i) => (
+					<li class="path__item reveal">
+						<span class:list={['node', i === stages.length - 1 && 'node--filled']} aria-hidden="true">
+							{numerals[i]}
+						</span>
+						<div class="path__body">
+							<h3 class="stage__title">{s.title}</h3>
+							<p class="stage__text">{s.text}</p>
+						</div>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</section>
+
+<style>
+	.journey {
+		margin-bottom: var(--panel-gap);
+	}
+	.journey :global(.sh) {
+		margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
+	}
+	.journey__intro {
+		max-width: 38rem;
+		margin: 0 auto clamp(2.5rem, 5vw, 3.75rem);
+		padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+		border-bottom: 1px solid var(--gold-deep);
+		text-align: center;
+		font-weight: 300;
+		font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+		line-height: 1.55;
+		color: var(--text-bright);
+		text-wrap: balance;
+	}
+	.journey__path {
+		--node: clamp(3rem, 5vw, 3.75rem);
+		width: min(100%, 46rem);
+		margin-inline: auto;
+	}
+	.path__item {
+		align-items: start;
+		column-gap: clamp(1.25rem, 3vw, 2.5rem);
+		padding-bottom: clamp(2.25rem, 4.5vw, 3.5rem);
+	}
+	.path__item:last-child {
+		padding-bottom: 0;
+	}
+	.path__body {
+		padding-top: max(0px, calc((var(--node) - 1.3em) / 2));
+	}
+	.stage__title {
+		margin-bottom: 0.6rem;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+		line-height: 1.3;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--gold);
+	}
+	.stage__text {
+		font-weight: 300;
+		font-size: clamp(1.05rem, 1.7vw, 1.25rem);
+		line-height: 1.6;
+		color: var(--text-bright);
+	}
+	@media (max-width: 480px) {
+		.journey__path {
+			--node: 2.75rem;
+		}
+	}
+
+	/* Cycle cue: IV leads back to someone else's I. Decorative, desktop only. */
+	@media (min-width: 1000px) {
+		.journey__path {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-rows: repeat(4, auto);
+		}
+		.journey__path > :nth-child(1) { grid-area: 1 / 1; }
+		.journey__path > :nth-child(2) { grid-area: 2 / 1; }
+		.journey__path > :nth-child(3) { grid-area: 3 / 1; }
+		.journey__path > :nth-child(4) { grid-area: 4 / 1; }
+		.journey__path::after {
+			content: '';
+			grid-area: 1 / 1 / 4 / 2;
+			justify-self: start;
+			align-self: stretch;
+			width: 5rem;
+			margin-left: -6rem;
+			margin-top: calc(var(--node) / 2);
+			margin-bottom: calc(var(--node) / -2);
+			border: 3px dotted var(--gold-deep);
+			border-right: 0;
+			border-radius: 2.5rem 0 0 2.5rem;
+			pointer-events: none;
+		}
+		.journey__path::before {
+			content: '';
+			grid-area: 1 / 1;
+			justify-self: start;
+			align-self: start;
+			margin-left: calc(-1rem - 11px);
+			margin-top: calc(var(--node) / 2 - 7px);
+			border: 7px solid transparent;
+			border-left: 11px solid var(--gold-deep);
+			border-right: 0;
+			pointer-events: none;
+		}
+	}
+</style>

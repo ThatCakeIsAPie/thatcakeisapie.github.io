@@ -2,82 +2,58 @@
 import { site } from '../content/site';
 import SectionHeading from './SectionHeading.astro';
 
-const { name, rules } = site.heroes;
+const { rules } = site.heroes;
 ---
 
-<div class="found">
-	<div class="found__grid">
-		<section class="slab glass glass--reading found__name reveal" aria-labelledby="name-h">
-			<SectionHeading label={name.label} id="name-h" />
-			<p class="found__text">{name.text}</p>
-		</section>
-
-		<section class="slab glass glass--reading found__rules" aria-labelledby="rules-h">
-			<SectionHeading label={rules.label} id="rules-h" />
-			<ul class="rules">
-				{
-					rules.items.map((r) => (
-						<li class="rule reveal">
-							<h3 class="rule__title">{r.title}</h3>
-							<p class="rule__text">{r.text}</p>
-						</li>
-					))
-				}
-			</ul>
-		</section>
+<section class="found" aria-labelledby="rules-h">
+	<div class="wrap slab glass glass--reading">
+		<SectionHeading label={rules.label} id="rules-h" />
+		<ul class="rules">
+			{
+				rules.items.map((r) => (
+					<li class="rule reveal">
+						<h3 class="rule__title">{r.title}</h3>
+						<p class="rule__text">{r.text}</p>
+					</li>
+				))
+			}
+		</ul>
 	</div>
-</div>
+</section>
 
 <style>
 	.found {
 		margin-bottom: var(--panel-gap);
 	}
-	.found__grid {
-		width: min(100% - 2 * var(--gutter), var(--wrap));
-		margin-inline: auto;
-		display: grid;
-		grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-		gap: var(--panel-gap);
-		align-items: stretch;
-	}
-	.found__name {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-	}
 	.found :global(.sh) {
 		margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
 	}
-	/* Quieter than the blocks above: body-size type, no display sizes. */
-	.found__text {
-		font-weight: 300;
-		font-size: clamp(1.1rem, 1.6vw, 1.3rem);
-		line-height: 1.7;
-		text-align: center;
-		text-wrap: balance;
-	}
+	/* Quieter than the blocks above: body-size type, three ruled columns. */
 	.rules {
 		display: grid;
-	}
-	.rule {
-		padding: 1.5rem 0;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
 		border-top: 1px solid var(--rule);
 	}
+	.rule {
+		padding: 1.75rem clamp(1.25rem, 2.5vw, 2.5rem) 0;
+	}
 	.rule:first-child {
-		padding-top: 0;
-		border-top: 0;
+		padding-left: 0;
 	}
 	.rule:last-child {
-		padding-bottom: 0;
+		padding-right: 0;
+	}
+	.rule + .rule {
+		border-left: 1px solid var(--rule);
 	}
 	.rule__title {
-		margin-bottom: 0.5rem;
+		margin-bottom: 0.6rem;
 		font-family: var(--font-display);
 		font-weight: 600;
 		font-size: 0.98rem;
 		letter-spacing: 0.16em;
 		text-transform: uppercase;
-		line-height: 1.3;
+		line-height: 1.4;
 		color: var(--gold);
 	}
 	.rule__text {
@@ -85,9 +61,22 @@ const { name, rules } = site.heroes;
 		line-height: 1.65;
 		color: var(--text-dim);
 	}
-	@media (max-width: 960px) {
-		.found__grid {
+	@media (max-width: 800px) {
+		.rules {
 			grid-template-columns: minmax(0, 1fr);
+		}
+		.rule,
+		.rule:first-child,
+		.rule:last-child {
+			padding: 1.5rem 0 0;
+		}
+		.rule:first-child {
+			padding-top: 1.5rem;
+		}
+		.rule + .rule {
+			border-left: 0;
+			border-top: 1px solid var(--rule);
+			margin-top: 1.5rem;
 		}
 	}
 </style>

@@ -273,9 +273,27 @@ export const site = {
 			intro: 'Our framework is universal.',
 			steps: ['Where you are.', 'Where you want to go.', 'What’s blocking the way.', 'Removing it.'],
 		},
-		name: {
-			label: 'THE NAME',
-			text: 'The name comes from the hero’s journey: you are the hero of your own growth story, and the team is the dojo where you train.',
+		journey: {
+			label: 'THE JOURNEY',
+			intro: 'The name comes from the hero’s journey: you are the hero of your own growth story, and the team is the dojo where you train.',
+			stages: [
+				{
+					title: 'THE CALL',
+					text: 'You feel the call to adventure. You probably refuse it at first, until you meet the mentor. With their help, you cross the threshold. That is getting started in business.',
+				},
+				{
+					title: 'THE TESTS',
+					text: 'Tests, allies and enemies. Early wins and losses. Some people support you, others don’t. You might lose your job or your car, but you push through anyway and start to win.',
+				},
+				{
+					title: 'THE ROAD BACK',
+					text: 'You now know ways to win reliably, and you have real momentum in your business.',
+				},
+				{
+					title: 'THE RETURN',
+					text: 'You return with wisdom, credibility and the conviction that it works. Now you are the mentor, and you find others who are just starting to feel the call, coming out of their ordinary world.',
+				},
+			],
 		},
 		rules: {
 			label: 'GROUND RULES',
