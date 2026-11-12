@@ -56,8 +56,7 @@ export const site = {
 
 	person: {
 		name: 'Lyle Cole',
-		// PLACEHOLDER
-		descriptor: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do.',
+		descriptor: 'High agency enabler and nitwit. Proverbs 29:18.',
 		/**
 		 * Set to an imported image to show a portrait, e.g.
 		 *   import portrait from '../assets/lyle.jpg';
@@ -163,23 +162,20 @@ export const site = {
 	goals: {
 		id: 'goals',
 		label: 'Goals',
-		// PLACEHOLDER (optional display heading; set to '' to hide)
-		heading: 'Ut enim ad minima veniam quis.',
+		// Optional display heading; '' hides it.
+		heading: '',
 		items: [
 			{
-				// PLACEHOLDER
-				title: 'Lorem ipsum dolor',
-				text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
+				title: 'Faith',
+				text: 'I’m a follower of Christ. Growing the kingdom is my first and primary goal.',
 			},
 			{
-				// PLACEHOLDER
-				title: 'Sit amet consectetur',
-				text: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+				title: 'Family',
+				text: 'My second goal is to create wealth for my family.',
 			},
 			{
-				// PLACEHOLDER
-				title: 'Adipiscing elit',
-				text: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+				title: 'Legacy',
+				text: 'My third goal is to leave a legacy by helping others do the first two themselves.',
 			},
 		] as Goal[],
 		workingLabel: 'What I am working on',
@@ -308,11 +304,6 @@ export const site = {
 					text: 'No income claims, lifestyle hype, fake testimonials or invented results. Nobody is pushed to go all-in.',
 				},
 			],
-		},
-		looking: {
-			label: 'Who I’m looking for',
-			text: 'People who want agency and ownership, are coachable, have a mentor posture and could become future operators.',
-			not: 'Not: pin-chasers, hype buyers, or anyone who needs “guaranteed”, “passive” or “investment” framing.',
 		},
 	},
 
