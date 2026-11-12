@@ -115,7 +115,9 @@ const numerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 		height: 0.75rem;
 		border: 1.5px solid var(--gold);
 		border-radius: 50%;
-		align-self: center;
+		/* Sit beside the first line (the name), also when the description runs to several lines. */
+		align-self: start;
+		margin-top: 0.5rem;
 	}
 	.working__name {
 		font-family: var(--font-display);

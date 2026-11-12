@@ -190,10 +190,10 @@ export const site = {
 			{
 				name: 'Ownership',
 				description: 'Building businesses where people earn in proportion to the useful work they create, with ownership and equity for doing it. The goal is that they get wealthy and the business no longer needs me day to day.',
-				link: '/faleth/',
+				link: null,
 			},
 		] as Project[],
-		linkLabel: 'Faleth Capital',
+		linkLabel: 'Visit',
 	},
 
 	contact: {
@@ -201,7 +201,7 @@ export const site = {
 		label: 'Get in touch',
 		/** Optional display heading; '' hides it. */
 		heading: '',
-		text: 'If you like what you hear and want to get to know me more, follow me and my work on any of the platforms below. I’m most active on X. Or reach out through the contact form, and I’ll get back to you personally.',
+		text: 'If you like what you hear and want to get to know me more, follow me and my work on any of my platforms. I’m most active on X. Or reach out through the contact form, and I’ll get back to you personally.',
 		form: {
 			// Worker that validates, spam-checks and stores submissions (worker/). The env override is for local previews only.
 			endpoint: import.meta.env.PUBLIC_CONTACT_ENDPOINT || 'https://coleholistics-contact.lylecole.workers.dev/contact',

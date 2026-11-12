@@ -292,15 +292,25 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 		position: static;
 		padding: 0.75rem 0 0;
 	}
-	/* Desktop: Name + Phone + Email on one row, then the message field + Send. */
+	/* Desktop: the panel sits in the left column of the contact section, so it stacks like the phone layout:
+	   Name + Phone, Email, the message field, then Send full width. */
 	@media (min-width: 901px) {
 		.cbar--panel .cbar__form {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
-			column-gap: 1rem;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			column-gap: 0.75rem;
 			row-gap: 0.75rem;
 		}
+		.cbar--panel .field--email,
 		.cbar--panel .cbar__row2 {
-			gap: 1rem;
+			grid-column: 1 / -1;
+		}
+		.cbar--panel .cbar__row2 {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0.75rem;
+		}
+		.cbar--panel .cbar__send {
+			width: 100%;
 		}
 		.cbar--panel .cbar__note {
 			margin-top: 0.1rem;

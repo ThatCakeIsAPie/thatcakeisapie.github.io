@@ -13,12 +13,14 @@ const socials = [...site.socials].sort((a, b) => Number(!!b.featured) - Number(!
 	<div class="wrap slab glass glass--reading">
 		<SectionHeading label={label} id={`${id}-h`} />
 		<div class="contact__body">
-			<div class="lede reveal">
-				{heading && <p class="lede__heading">{heading}</p>}
-				<p class="lede__text">{text}</p>
-			</div>
-			<div class="contact__form reveal">
-				<ContactForm variant="panel" idPrefix="cfp" />
+			<div class="contact__main">
+				<div class="lede reveal">
+					{heading && <p class="lede__heading">{heading}</p>}
+					<p class="lede__text">{text}</p>
+				</div>
+				<div class="contact__form reveal">
+					<ContactForm variant="panel" idPrefix="cfp" />
+				</div>
 			</div>
 			<ul class="links reveal">
 			{
@@ -47,14 +49,26 @@ const socials = [...site.socials].sort((a, b) => Number(!!b.featured) - Number(!
 	.contact {
 		margin-bottom: var(--panel-gap);
 	}
-	/* One column: paragraph, then the form, then the platform list. */
+	/* Desktop: paragraph and form on the left, the platform list on the right. One column below 901px. */
 	.contact__body {
 		display: grid;
-		grid-template-columns: minmax(0, 1fr);
-		gap: clamp(2rem, 4vw, 3rem);
+		grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+		gap: clamp(3rem, 8vw, 7rem);
+		align-items: start;
+	}
+	.contact__main {
+		display: grid;
+		gap: clamp(1.5rem, 3vw, 2.25rem);
+		min-width: 0;
 	}
 	.contact__form {
 		min-width: 0;
+	}
+	@media (max-width: 900px) {
+		.contact__body {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 2.5rem;
+		}
 	}
 	.lede__heading {
 		font-family: var(--font-display);
