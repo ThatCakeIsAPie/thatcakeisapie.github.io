@@ -314,11 +314,6 @@ export const site = {
 			text: 'People who want agency and ownership, are coachable, have a mentor posture and could become future operators.',
 			not: 'Not: pin-chasers, hype buyers, or anyone who needs “guaranteed”, “passive” or “investment” framing.',
 		},
-		closing: {
-			text: 'Curious what Heroes is about? Reach out and we’ll talk, one on one.',
-			linkLabel: 'Get in touch',
-			href: '/#contact-form',
-		},
 	},
 
 	/** /faleth/ : real copy, used as written. */
