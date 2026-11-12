@@ -1,0 +1,72 @@
+---
+import { site } from '../content/site';
+import SectionHeading from './SectionHeading.astro';
+
+const { id, label, heading, intro, chapters } = site.story;
+const numerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+---
+
+<section class="story" id={id} aria-labelledby={`${id}-h`}>
+	<div class="wrap slab glass glass--reading">
+		<SectionHeading label={label} id={`${id}-h`} />
+		<div class="story__grid">
+			<div class="lede reveal">
+				{heading && <p class="lede__heading">{heading}</p>}
+				<p class="lede__intro">{intro}</p>
+			</div>
+			<ol class="path">
+				{
+					chapters.map((c, i) => (
+						<li class="path__item reveal">
+							<span class="node" aria-hidden="true">{numerals[i]}</span>
+							<div class="path__body">
+								<h3 class="path__title">{c.title}</h3>
+								<p>{c.text}</p>
+							</div>
+						</li>
+					))
+				}
+			</ol>
+		</div>
+	</div>
+</section>
+
+<style>
+	.story {
+		margin-bottom: var(--panel-gap);
+	}
+	.story__grid {
+		display: grid;
+		grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+		gap: clamp(3rem, 8vw, 7rem);
+		align-items: start;
+	}
+	.lede {
+		position: sticky;
+		top: calc(var(--header-h) + 2.5rem);
+	}
+	.lede__heading {
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: clamp(1.7rem, 3vw, 2.4rem);
+		line-height: 1.25;
+		letter-spacing: 0.03em;
+		color: var(--text-bright);
+		text-wrap: balance;
+		margin-bottom: 1.5rem;
+	}
+	.lede__intro {
+		font-size: 1.2rem;
+		font-weight: 300;
+		color: var(--text);
+	}
+	@media (max-width: 900px) {
+		.story__grid {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 3rem;
+		}
+		.lede {
+			position: static;
+		}
+	}
+</style>

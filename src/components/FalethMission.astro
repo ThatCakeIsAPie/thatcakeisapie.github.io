@@ -1,0 +1,38 @@
+---
+import { site } from '../content/site';
+import SectionHeading from './SectionHeading.astro';
+
+const { label, text } = site.faleth.mission;
+---
+
+<section class="mission" aria-labelledby="mission-h">
+	<div class="wrap slab glass glass--reading">
+		<SectionHeading label={label} id="mission-h" />
+		<p class="mission__text reveal">{text}</p>
+	</div>
+</section>
+
+<style>
+	.mission {
+		margin-bottom: var(--panel-gap);
+	}
+	.wrap {
+		padding-block: clamp(3rem, 7vw, 6rem);
+	}
+	.mission :global(.sh) {
+		margin-bottom: clamp(2rem, 4vw, 3.25rem);
+	}
+	/* The page's strongest statement. */
+	.mission__text {
+		max-width: 34ch;
+		margin-inline: auto;
+		text-align: center;
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: clamp(1.65rem, 4vw, 3.1rem);
+		line-height: 1.28;
+		letter-spacing: 0.02em;
+		color: var(--text-bright);
+		text-wrap: balance;
+	}
+</style>

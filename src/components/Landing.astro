@@ -1,0 +1,343 @@
+---
+import { site } from '../content/site';
+import PhotoFrame from './PhotoFrame.astro';
+import SocialIcon from './SocialIcon.astro';
+import ContactForm from './ContactForm.astro';
+
+const { person, landing, socials, contact } = site;
+---
+
+<section class="landing" aria-labelledby="name">
+	<div class="wrap landing__grid">
+		<div class="who">
+			<div class="who__photo">
+				<PhotoFrame photo={person.photo} alt={person.photoAlt} label={person.photoPlaceholderLabel} />
+			</div>
+			<div class="who__id">
+				<h1 id="name" class="who__name">{person.name}</h1>
+				<span class="who__rule" aria-hidden="true"></span>
+				<p class="who__desc">{person.descriptor}</p>
+				<a class="who__jump" href={`#${contact.id}-form`}>{contact.label}</a>
+			</div>
+		</div>
+
+		<div class="panel glass">
+			<h2 class="glabel"><span>{landing.useLabel}</span></h2>
+			<ul class="rows">
+				{
+					landing.links.map((l) => (
+						<li>
+							<a class="row" href={l.href} rel="noopener">
+								<span class="row__text">
+									<span class="row__title">{l.title}</span>
+									<span class="row__desc">{l.description}</span>
+								</span>
+								<svg class="row__arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+									<path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+								</svg>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+			{landing.affiliateNote && <p class="note">{landing.affiliateNote}</p>}
+
+			<div class="find">
+				<h2 class="glabel"><span>{landing.findLabel}</span></h2>
+				<ul class="chips">
+					{
+						socials.map((s) => (
+							<li>
+								<a class="chip" href={s.href} rel="noopener">
+									<SocialIcon id={s.id} />
+									<span>{s.name}</span>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</div>
+
+		<div class="landing__form">
+			<ContactForm />
+		</div>
+	</div>
+</section>
+
+<style>
+	.landing {
+		position: relative;
+		min-height: 100svh;
+		overflow-x: clip;
+		display: grid;
+		/* The grid inside fills the screen: columns centred in the free space, the form bar pinned to the bottom.
+		   Spacing scales with the viewport height so the whole screen, form included, fits from 760px tall up.
+		   The bottom padding leaves room for the form's messages, which sit just under the bar. */
+		padding: calc(var(--header-h) + clamp(0.75rem, 3svh, 2.5rem)) 0 clamp(2.5rem, 6.5svh, 4rem);
+		/* No artwork of its own: it sits on the fixed site-wide backdrop (Base.astro / global.css). */
+	}
+
+	.landing__grid {
+		display: grid;
+		grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
+		grid-template-rows: 1fr auto;
+		column-gap: clamp(2.5rem, 6vw, 5rem);
+		row-gap: clamp(0.75rem, 3svh, 2rem);
+		align-items: center;
+	}
+	.landing__form {
+		grid-column: 1 / -1;
+		min-width: 0;
+	}
+
+	/* ---- left: portrait ---- */
+	.who {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+	.who__photo {
+		width: min(100%, 21rem, clamp(8.8rem, 28.8svh, 21rem));
+	}
+	/* Name + descriptor sit straight on the art: a soft local darkening (no visible box) keeps them legible. */
+	.who__id {
+		position: relative;
+		isolation: isolate;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-top: clamp(1rem, 3svh, 2rem);
+	}
+	.who__id::before {
+		content: '';
+		position: absolute;
+		inset: -1.5rem -2.5rem;
+		z-index: -1;
+		background: radial-gradient(ellipse closest-side at center, rgba(9, 18, 17, 0.62) 0%, rgba(9, 18, 17, 0.45) 55%, rgba(9, 18, 17, 0) 100%);
+		pointer-events: none;
+	}
+	.who__name {
+		text-shadow: 0 1px 14px rgba(9, 18, 17, 0.75);
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: clamp(2.1rem, min(4.2vw, 6svh), 3.25rem);
+		letter-spacing: 0.14em;
+		text-indent: 0.14em;
+		text-transform: uppercase;
+		line-height: 1.1;
+		color: var(--text-bright);
+	}
+	.who__rule {
+		width: 3.5rem;
+		height: 1px;
+		margin-block: clamp(0.6rem, 1.8svh, 1.1rem);
+		background: var(--gold);
+	}
+	.who__desc {
+		max-width: 26rem;
+		color: var(--text);
+		text-wrap: balance;
+		text-shadow: 0 1px 10px rgba(9, 18, 17, 0.8);
+	}
+
+	/* Phone/tablet only: a one-tap jump to the form, which sits below the links panel in the stacked layout. */
+	.who__jump {
+		display: none;
+	}
+
+	/* ---- right: links panel ---- */
+	.panel {
+		/* Liquid glass via .glass (global.css): the stained glass shows through, blurred. */
+		padding: clamp(1rem, 3svh, 2.75rem) clamp(1.5rem, 3.2vw, 2.75rem);
+	}
+	.glabel {
+		display: flex;
+		align-items: center;
+		gap: 1.1rem;
+		margin: 0;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 0.9rem;
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		color: var(--gold);
+	}
+	.glabel::before,
+	.glabel::after {
+		content: '';
+		flex: 1;
+		height: 1px;
+		background: var(--gold-deep);
+		opacity: 0.7;
+	}
+	.glabel span {
+		text-indent: 0.28em;
+	}
+
+	.rows {
+		margin-top: clamp(0.5rem, 1.4svh, 1.1rem);
+		display: grid;
+		gap: 0.2rem;
+	}
+	/* Row links: clear until hover/focus, then a slightly lighter glass (no blur: nested inside the panel's glass). */
+	.row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.25rem;
+		min-height: clamp(3.5rem, 8svh, 5rem);
+		padding: clamp(0.35rem, 1.1svh, 0.9rem) 1rem;
+		border: 1px solid transparent;
+		border-radius: 16px;
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease,
+			box-shadow 0.2s ease;
+	}
+	.row__text {
+		display: grid;
+		gap: 0.15rem;
+	}
+	.row__title {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 1.3rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--text-bright);
+		line-height: 1.25;
+		transition: color 0.2s ease;
+	}
+	.row__desc {
+		font-size: 1rem;
+		color: var(--text-dim);
+	}
+	.row__arrow {
+		width: 1.6rem;
+		height: 1.6rem;
+		flex: none;
+		color: var(--gold);
+		transition: transform 0.2s ease;
+	}
+	.row:hover,
+	.row:focus-visible {
+		background: var(--glass-hover);
+		border-color: var(--glass-hover-border);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+	}
+	.row:focus-visible {
+		outline-offset: 2px;
+	}
+	.row:hover .row__title,
+	.row:focus-visible .row__title {
+		color: var(--gold-light);
+	}
+	.row:hover .row__arrow,
+	.row:focus-visible .row__arrow {
+		transform: translateX(4px);
+	}
+
+	.note {
+		margin-top: clamp(0.4rem, 1svh, 1rem);
+		padding-inline: 1rem;
+		font-size: 0.9rem;
+		color: var(--muted);
+	}
+
+	.find {
+		margin-top: clamp(0.9rem, 2.4svh, 1.75rem);
+		padding-top: clamp(0.9rem, 2.4svh, 1.75rem);
+		border-top: 1px solid var(--glass-border);
+	}
+	.chips {
+		margin-top: clamp(0.7rem, 1.8svh, 1.25rem);
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45rem;
+	}
+	.chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		min-height: 2.75rem;
+		padding: 0 1rem 0 0.85rem;
+		border: 1px solid var(--glass-border);
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.04);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+		font-size: 0.92rem;
+		font-weight: 500;
+		color: var(--text);
+		transition:
+			border-color 0.2s ease,
+			background-color 0.2s ease,
+			color 0.2s ease;
+	}
+	.chip :global(svg) {
+		color: var(--gold);
+	}
+	.chip:hover {
+		border-color: var(--gold);
+		background: var(--glass-hover);
+		color: var(--text-bright);
+	}
+
+	@media (max-width: 900px) {
+		.landing {
+			padding-top: calc(var(--header-h) + 1.25rem);
+			padding-bottom: 1.5rem;
+		}
+		.landing__grid {
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-rows: none;
+			row-gap: 1.75rem;
+			align-items: start;
+		}
+		.landing__form {
+			grid-column: auto;
+		}
+		.who__jump {
+			display: inline-flex;
+			align-items: center;
+			min-height: 2.75rem;
+			margin-top: 0.5rem;
+			padding: 0 0.25rem;
+			font-family: var(--font-display);
+			font-weight: 600;
+			font-size: 0.85rem;
+			letter-spacing: 0.2em;
+			text-transform: uppercase;
+			color: var(--gold);
+			border-bottom: 1px solid var(--gold-deep);
+			text-shadow: 0 1px 10px rgba(9, 18, 17, 0.8);
+		}
+		.who__jump:hover {
+			color: var(--gold-light);
+		}
+		.panel {
+			padding: 1.5rem clamp(1.25rem, 4vw, 2rem);
+		}
+		.row {
+			padding-block: 0.9rem;
+		}
+		.who__photo {
+			width: min(100%, 13.5rem);
+		}
+		.who__id {
+			margin-top: 1.5rem;
+		}
+		/* the portrait art is brighter behind the stacked layout: darken a little more, and stay inside the viewport */
+		.who__id::before {
+			inset: -1.5rem -2.25rem -1.75rem;
+			background: radial-gradient(ellipse closest-side at center, rgba(9, 18, 17, 0.88) 0%, rgba(9, 18, 17, 0.78) 66%, rgba(9, 18, 17, 0) 100%);
+		}
+		.row {
+			min-height: 4.5rem;
+		}
+		.row__title {
+			font-size: 1.15rem;
+		}
+	}
+</style>

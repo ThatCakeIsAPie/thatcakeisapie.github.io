@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import FalethPage from '../components/FalethPage.astro';
+import FalethMission from '../components/FalethMission.astro';
+import FalethDoors from '../components/FalethDoors.astro';
+import FalethOffice from '../components/FalethOffice.astro';
+import FalethPay from '../components/FalethPay.astro';
+import FalethOwnership from '../components/FalethOwnership.astro';
+import FalethGovernance from '../components/FalethGovernance.astro';
+import FalethBuckets from '../components/FalethBuckets.astro';
+import FalethSteps from '../components/FalethSteps.astro';
+import FalethDoing from '../components/FalethDoing.astro';
+import FalethDocuments from '../components/FalethDocuments.astro';
+import { site } from '../content/site';
+---
+
+<Base title={site.faleth.title} description={site.faleth.description}>
+	<FalethPage />
+	<FalethMission />
+	<FalethDoors />
+	<FalethOffice />
+	<FalethPay />
+	<div class="wrap pair">
+		<FalethOwnership />
+		<FalethGovernance />
+	</div>
+	<FalethBuckets />
+	<FalethSteps />
+	<FalethDoing />
+	<FalethDocuments />
+</Base>
+
+<style>
+	/* Two small panels side by side on desktop; stacked (with the usual gap) on narrow screens. */
+	.pair {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: clamp(1.5rem, 3vw, 2.5rem);
+		margin-bottom: var(--panel-gap);
+	}
+	@media (max-width: 900px) {
+		.pair {
+			grid-template-columns: minmax(0, 1fr);
+			gap: var(--panel-gap);
+		}
+	}
+</style>

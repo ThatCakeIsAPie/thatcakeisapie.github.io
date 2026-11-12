@@ -1,0 +1,50 @@
+---
+import { site } from '../content/site';
+import SectionHeading from './SectionHeading.astro';
+
+const { label, items } = site.faleth.governance;
+---
+
+<section class="gov" aria-labelledby="gov-h">
+	<div class="slab glass glass--reading gov__panel">
+		<SectionHeading label={label} id="gov-h" />
+		<ul class="gov__list">
+			{
+				items.map((g) => (
+					<li class="gov__item reveal">
+						<p>
+							<span class="gov__lead">{g.lead}</span>{' '}
+							{g.text}
+						</p>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.gov,
+	.gov__panel {
+		height: 100%;
+	}
+	.gov__list {
+		border-top: 1px solid var(--gold-deep);
+	}
+	.gov__item {
+		padding-block: 1.75rem;
+		border-bottom: 1px solid var(--rule);
+	}
+	.gov__item:last-child {
+		border-bottom: 0;
+	}
+	.gov__lead {
+		display: inline;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 1.1em;
+		letter-spacing: 0.08em;
+		color: var(--gold);
+		line-height: 1.3;
+	}
+</style>

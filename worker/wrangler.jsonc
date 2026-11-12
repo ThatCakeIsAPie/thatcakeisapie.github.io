@@ -1,0 +1,30 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "coleholistics-contact",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-11-11",
+	"workers_dev": true,
+	"observability": {
+		"enabled": true,
+		"traces": { "enabled": true }
+	},
+	"vars": {
+		// Comma-separated list of exact origins allowed to call POST /contact.
+		// Local dev adds localhost origins through .dev.vars (gitignored).
+		"ALLOWED_ORIGINS": "https://coleholistics.us,https://www.coleholistics.us",
+		// Sender of the notification email (a domain with Email Routing enabled). Recipient is the secret NOTIFY_TO.
+		"NOTIFY_FROM": "contact@coleholistics.us"
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "coleholistics-contact",
+			"database_id": "23179ffd-87a7-4266-b46e-8d83ab61183b",
+			"migrations_dir": "migrations"
+		}
+	],
+	// Unrestricted send binding: the recipient comes from the secret NOTIFY_TO (kept out of this public file).
+	// It only reaches verified Email Routing destination addresses on the free plan.
+	"send_email": [{ "name": "EMAIL" }]
+	// Secrets (wrangler secret put): TURNSTILE_SECRET, IP_PEPPER, NOTIFY_TO.
+}

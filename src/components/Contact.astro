@@ -1,0 +1,141 @@
+---
+import { site } from '../content/site';
+import SectionHeading from './SectionHeading.astro';
+import SocialIcon from './SocialIcon.astro';
+
+const { id, label, heading, text } = site.contact;
+---
+
+<section class="contact" id={id} aria-labelledby={`${id}-h`}>
+	<div class="wrap slab glass glass--reading">
+		<SectionHeading label={label} id={`${id}-h`} />
+		<div class="contact__grid">
+			<div class="lede reveal">
+				{heading && <p class="lede__heading">{heading}</p>}
+				<p class="lede__text">{text}</p>
+			</div>
+			<ul class="links reveal">
+			{
+				site.socials.map((s) => (
+					<li>
+						<a class="link" href={s.href} rel="noopener">
+							<SocialIcon id={s.id} />
+							<span class="link__name">{s.name}</span>
+							<span class="link__handle">{s.handle}</span>
+							<svg class="link__arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+								<path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+							</svg>
+						</a>
+					</li>
+				))
+			}
+			</ul>
+		</div>
+	</div>
+</section>
+
+<style>
+	.contact {
+		margin-bottom: var(--panel-gap);
+	}
+	.contact__grid {
+		display: grid;
+		grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+		gap: clamp(3rem, 8vw, 7rem);
+		align-items: start;
+	}
+	.lede__heading {
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: clamp(1.7rem, 3vw, 2.4rem);
+		line-height: 1.25;
+		letter-spacing: 0.03em;
+		color: var(--text-bright);
+		text-wrap: balance;
+		margin-bottom: 1.5rem;
+	}
+	.lede__text {
+		font-size: 1.2rem;
+		font-weight: 300;
+	}
+	.links {
+		border-top: 1px solid var(--gold-deep);
+	}
+	.links li {
+		border-bottom: 1px solid var(--rule);
+	}
+	.link {
+		display: grid;
+		grid-template-columns: 1.6rem 1fr auto 1.5rem;
+		align-items: center;
+		column-gap: 1.1rem;
+		min-height: 4.75rem;
+		padding-inline: 0.25rem 0.5rem;
+		transition:
+			background-color 0.2s ease,
+			padding 0.2s ease;
+	}
+	.link :global(.social-icon) {
+		width: 1.5rem;
+		height: 1.5rem;
+		color: var(--gold);
+	}
+	.link__name {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 1.15rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--text-bright);
+		transition: color 0.2s ease;
+	}
+	.link__handle {
+		color: var(--text-dim);
+		font-size: 1rem;
+		text-align: right;
+		overflow-wrap: anywhere;
+	}
+	.link__arrow {
+		width: 1.4rem;
+		height: 1.4rem;
+		color: var(--gold);
+		transition: transform 0.2s ease;
+	}
+	.link:hover {
+		background: var(--glass-hover);
+		padding-inline: 0.9rem;
+	}
+	.link:hover .link__name {
+		color: var(--gold-light);
+	}
+	.link:hover .link__arrow {
+		transform: translateX(4px);
+	}
+	@media (max-width: 900px) {
+		.contact__grid {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 2.5rem;
+		}
+	}
+	@media (max-width: 480px) {
+		.link {
+			grid-template-columns: 1.5rem 1fr 1.25rem;
+			row-gap: 0;
+			padding-block: 0.8rem;
+		}
+		.link__handle {
+			grid-column: 2;
+			grid-row: 2;
+			text-align: left;
+			font-size: 0.95rem;
+		}
+		.link__arrow {
+			grid-column: 3;
+			grid-row: 1 / span 2;
+		}
+		.link :global(.social-icon) {
+			grid-row: 1 / span 2;
+		}
+	}
+</style>
+

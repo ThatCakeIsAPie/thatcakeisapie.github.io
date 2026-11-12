@@ -1,0 +1,561 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { site } from '../../content/site';
+import { formatUpdated } from '../../lib/canon-dates';
+
+export async function getStaticPaths() {
+	const docs = (await getCollection('canon')).sort((a, b) => a.data.order - b.data.order);
+	return docs.map((entry, i) => ({
+		params: { slug: entry.id },
+		props: { entry, prev: docs[i - 1], next: docs[i + 1] },
+	}));
+}
+
+const { entry, prev, next } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const t = site.faleth.doc;
+const toc = d.headings.filter((h) => h.depth === 2);
+const updated = formatUpdated(d.updated);
+---
+
+<Base title={`${d.title} · ${t.titleSuffix}`} description={d.tagline || t.descriptionFallback}>
+	<article class="doc">
+		<header class="wrap doc__head slab glass glass--doc">
+			<p class="doc__eyebrow">{t.eyebrow}</p>
+			<h1 class="doc__title">{d.title}</h1>
+			{d.tagline && <p class="doc__tagline">{d.tagline}</p>}
+			{
+				(d.meta || updated) && (
+					<p class="doc__meta">
+						{d.meta}
+						{d.meta && updated && <span aria-hidden="true"> · </span>}
+						{updated && (
+							<span>
+								{t.updated} <time datetime={d.updated ?? undefined}>{updated}</time>
+							</span>
+						)}
+					</p>
+				)
+			}
+			{d.companionHtml && <div class="doc__companion" set:html={d.companionHtml} />}
+		</header>
+
+		<div class="wrap doc__layout">
+			{
+				toc.length > 0 && (
+					<aside class="doc__side" aria-label={t.tocLabel}>
+						<nav class="toc toc--side glass glass--doc">
+							<p class="toc__label">{t.tocLabel}</p>
+							<ol class="toc__list">
+								{toc.map((h) => (
+									<li>
+										<a href={`#${h.slug}`}>{h.text}</a>
+									</li>
+								))}
+							</ol>
+						</nav>
+					</aside>
+				)
+			}
+
+			<div class="doc__col">
+				{
+					toc.length > 0 && (
+						<details class="toc toc--top glass glass--doc">
+							<summary>{t.tocLabel}</summary>
+							<ol class="toc__list">
+								{toc.map((h) => (
+									<li>
+										<a href={`#${h.slug}`}>{h.text}</a>
+									</li>
+								))}
+							</ol>
+						</details>
+					)
+				}
+				<div class="doc__body glass glass--doc">
+					<div class="prose">
+						<Content />
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<nav class="wrap doc__pager slab glass glass--doc" aria-label={t.pagerLabel}>
+			<div class="pager__row">
+				{
+					prev ? (
+						<a class="pager__link pager__link--prev" href={`/faleth/${prev.id}/`} rel="prev">
+							<span class="pager__dir">← {t.prev}</span>
+							<span class="pager__name">{prev.data.title}</span>
+						</a>
+					) : (
+						<span></span>
+					)
+				}
+				{
+					next ? (
+						<a class="pager__link pager__link--next" href={`/faleth/${next.id}/`} rel="next">
+							<span class="pager__dir">{t.next} →</span>
+							<span class="pager__name">{next.data.title}</span>
+						</a>
+					) : (
+						<span></span>
+					)
+				}
+			</div>
+			<p class="pager__back"><a href="/faleth/">← {t.back}</a></p>
+		</nav>
+	</article>
+</Base>
+
+<style>
+	.doc {
+		padding-top: calc(var(--header-h) + var(--panel-gap));
+		padding-bottom: var(--panel-gap);
+	}
+
+	/* Document panels are denser than the landing's reading glass: long text over moving colour tires the eye. */
+	.glass--doc {
+		--glass-tint: rgba(10, 21, 20, 0.7);
+		--glass-filter: blur(28px) saturate(150%) brightness(0.7);
+	}
+	@media (prefers-reduced-transparency: reduce) {
+		.glass--doc {
+			--glass-tint: rgba(14, 28, 26, 0.94);
+			--glass-filter: none;
+		}
+	}
+
+	/* Header panel */
+	.doc__head {
+		width: min(100% - 2 * var(--gutter), 72rem);
+		margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+		padding-block: clamp(2rem, 5vw, 3.5rem);
+	}
+	.doc__eyebrow {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 0.8rem;
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		color: var(--gold);
+	}
+	.doc__title {
+		margin-top: 1rem;
+		max-width: 22ch;
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: clamp(2rem, 4.8vw, 3.4rem);
+		line-height: 1.12;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--gold);
+		text-wrap: balance;
+		overflow-wrap: anywhere;
+	}
+	.doc__tagline {
+		margin-top: 1.5rem;
+		max-width: 44rem;
+		font-size: clamp(1.15rem, 2vw, 1.4rem);
+		font-weight: 300;
+		line-height: 1.5;
+		color: var(--text-bright);
+		text-wrap: balance;
+	}
+	.doc__meta {
+		margin-top: 1.5rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--rule);
+		max-width: none;
+		font-size: 0.95rem;
+		letter-spacing: 0.05em;
+		color: var(--text-dim);
+	}
+	.doc__companion {
+		margin-top: 0.6rem;
+		max-width: 60ch;
+		font-size: 0.95rem;
+		line-height: 1.6;
+		color: var(--muted);
+	}
+	.doc__companion :global(p) {
+		max-width: none;
+	}
+	.doc__companion :global(em) {
+		font-style: normal;
+	}
+	.doc__companion :global(a) {
+		color: var(--text-dim);
+		border-bottom: 1px solid var(--gold-deep);
+	}
+	.doc__companion :global(a:hover) {
+		color: var(--gold-light);
+	}
+
+	/* Text + contents */
+	.doc__layout {
+		width: min(100% - 2 * var(--gutter), 72rem);
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 1.25rem;
+		margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+	}
+	.doc__col {
+		min-width: 0;
+		display: grid;
+		gap: 1.25rem;
+		align-content: start;
+	}
+	.doc__side {
+		display: none;
+	}
+	@media (min-width: 1100px) {
+		.doc__layout {
+			grid-template-columns: 16.5rem minmax(0, 1fr);
+			gap: 2rem;
+			align-items: start;
+		}
+		.doc__side {
+			display: block;
+			position: sticky;
+			top: calc(var(--header-h) + 1.5rem);
+			max-height: calc(100vh - var(--header-h) - 3rem);
+		}
+		.toc--top {
+			display: none;
+		}
+	}
+
+	.toc {
+		--glass-radius: 20px;
+		padding: 1.25rem 1.25rem 1.1rem;
+	}
+	.toc--side {
+		max-height: calc(100vh - var(--header-h) - 3rem);
+		overflow-y: auto;
+		overscroll-behavior: contain;
+	}
+	.toc__label,
+	.toc summary {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 0.8rem;
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		color: var(--gold);
+	}
+	.toc summary {
+		cursor: pointer;
+		list-style: none;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		min-height: 2.25rem;
+	}
+	.toc summary::-webkit-details-marker {
+		display: none;
+	}
+	.toc summary::after {
+		content: '+';
+		font-size: 1.2rem;
+		letter-spacing: 0;
+	}
+	.toc[open] summary::after {
+		content: '–';
+	}
+	.toc__list {
+		margin-top: 0.75rem;
+		border-top: 1px solid var(--gold-deep);
+		counter-reset: toc;
+	}
+	.toc__list li {
+		border-bottom: 1px solid var(--rule);
+	}
+	.toc__list li:last-child {
+		border-bottom: 0;
+	}
+	.toc__list a {
+		display: block;
+		padding: 0.55rem 0;
+		font-size: 0.95rem;
+		line-height: 1.4;
+		color: var(--text);
+		transition: color 0.2s ease;
+	}
+	.toc__list a:hover {
+		color: var(--gold-light);
+	}
+
+	.doc__body {
+		padding: clamp(1.5rem, 5vw, 4rem);
+		min-width: 0;
+	}
+
+	/* Prose: markdown output, so selectors are global. */
+	.prose {
+		max-width: 70ch;
+		margin-inline: auto;
+		font-size: 1.0625rem;
+		line-height: 1.75;
+		color: var(--text);
+		overflow-wrap: break-word;
+	}
+	@media (min-width: 1100px) {
+		.prose {
+			font-size: 1.125rem;
+		}
+	}
+	.prose > :global(:first-child) {
+		margin-top: 0;
+	}
+	.prose :global(p),
+	.prose :global(ul),
+	.prose :global(ol),
+	.prose :global(blockquote),
+	.prose :global(.table-wrap) {
+		max-width: none;
+		margin-top: 1.15em;
+	}
+	.prose :global(p) {
+		text-wrap: pretty;
+	}
+	.prose :global(h2),
+	.prose :global(h3),
+	.prose :global(h4),
+	.prose :global(h5),
+	.prose :global(h6) {
+		scroll-margin-top: calc(var(--header-h) + 1.25rem);
+		font-family: var(--font-display);
+		line-height: 1.25;
+		text-wrap: balance;
+	}
+	.prose :global(h2) {
+		margin-top: 3.25em;
+		padding-top: 1.4em;
+		border-top: 1px solid var(--gold-deep);
+		font-weight: 600;
+		font-size: clamp(1.4rem, 2.4vw, 1.7rem);
+		letter-spacing: 0.06em;
+		color: var(--gold);
+	}
+	/* A markdown `---` right before a heading already draws the rule; don't add the heading's own. */
+	.prose :global(hr + h2) {
+		margin-top: 0;
+		padding-top: 0;
+		border-top: 0;
+	}
+	.prose > :global(h2:first-child) {
+		margin-top: 0;
+		padding-top: 0;
+		border-top: 0;
+	}
+	.prose :global(h3) {
+		margin-top: 2.4em;
+		font-weight: 600;
+		font-size: clamp(1.15rem, 2vw, 1.35rem);
+		letter-spacing: 0.05em;
+		color: var(--text-bright);
+	}
+	.prose :global(h4),
+	.prose :global(h5),
+	.prose :global(h6) {
+		margin-top: 2em;
+		font-family: var(--font-body);
+		font-weight: 600;
+		font-size: 1.05em;
+		color: var(--gold-light);
+	}
+	.prose :global(h2 + p),
+	.prose :global(h3 + p),
+	.prose :global(h4 + p) {
+		margin-top: 0.9em;
+	}
+	.prose :global(strong) {
+		font-weight: 600;
+		color: var(--text-bright);
+	}
+	.prose :global(a) {
+		color: var(--gold-light);
+		border-bottom: 1px solid var(--gold-deep);
+		transition:
+			color 0.2s ease,
+			border-color 0.2s ease;
+	}
+	.prose :global(a:hover) {
+		color: var(--text-bright);
+		border-color: var(--gold-light);
+	}
+	.prose :global(hr) {
+		height: 1px;
+		margin: 2.75em 0;
+		border: 0;
+		background: linear-gradient(90deg, transparent, var(--gold-deep) 18%, var(--gold-deep) 82%, transparent);
+		opacity: 0.8;
+	}
+	.prose :global(ul),
+	.prose :global(ol) {
+		padding-left: 1.5em;
+	}
+	.prose :global(ul) {
+		list-style: disc;
+	}
+	.prose :global(ol) {
+		list-style: decimal;
+	}
+	.prose :global(li) {
+		margin-top: 0.5em;
+		padding-left: 0.2em;
+	}
+	.prose :global(li::marker) {
+		color: var(--gold);
+	}
+	.prose :global(li > ul),
+	.prose :global(li > ol) {
+		margin-top: 0.5em;
+	}
+	.prose :global(li > p) {
+		margin-top: 0.6em;
+	}
+	.prose :global(blockquote) {
+		margin-inline: 0;
+		padding: 0.15em 0 0.15em 1.4em;
+		border-left: 2px solid var(--gold);
+		color: var(--text-bright);
+	}
+	.prose :global(blockquote > :first-child) {
+		margin-top: 0;
+	}
+	.prose :global(code) {
+		padding: 0.1em 0.4em;
+		border-radius: 5px;
+		background: rgba(0, 0, 0, 0.32);
+		font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+		font-size: 0.88em;
+		color: var(--gold-light);
+	}
+	.prose :global(pre) {
+		margin-top: 1.15em;
+		padding: 1rem 1.25rem;
+		overflow-x: auto;
+		border: 1px solid var(--rule);
+		border-radius: 12px;
+		background: rgba(0, 0, 0, 0.32);
+		line-height: 1.55;
+	}
+	.prose :global(pre code) {
+		padding: 0;
+		background: none;
+	}
+	.prose :global(.table-wrap) {
+		overflow-x: auto;
+		border: 1px solid var(--rule);
+		border-radius: 12px;
+		background: rgba(255, 255, 255, 0.025);
+	}
+	.prose :global(table) {
+		width: 100%;
+		min-width: 30rem;
+		border-collapse: collapse;
+		font-size: 0.95em;
+		line-height: 1.5;
+	}
+	.prose :global(th),
+	.prose :global(td) {
+		padding: 0.7rem 1rem;
+		text-align: left;
+		vertical-align: top;
+		border-bottom: 1px solid var(--rule);
+	}
+	.prose :global(th) {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 0.78em;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--gold);
+		border-bottom: 1px solid var(--gold-deep);
+		white-space: nowrap;
+	}
+	.prose :global(tbody tr:last-child td) {
+		border-bottom: 0;
+	}
+	.prose :global(img) {
+		max-width: 100%;
+		height: auto;
+	}
+
+	/* Previous / next / back */
+	.doc__pager {
+		width: min(100% - 2 * var(--gutter), 72rem);
+		padding-block: clamp(1.5rem, 3vw, 2.25rem);
+	}
+	.pager__row {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1.5rem clamp(1.5rem, 4vw, 3rem);
+	}
+	.pager__link {
+		display: grid;
+		gap: 0.4rem;
+		align-content: start;
+		padding-block: 0.25rem;
+		transition: color 0.2s ease;
+	}
+	.pager__link--next {
+		text-align: right;
+		grid-column: 2;
+	}
+	.pager__dir {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 0.8rem;
+		letter-spacing: 0.22em;
+		text-transform: uppercase;
+		color: var(--gold);
+	}
+	.pager__name {
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: clamp(1.05rem, 2vw, 1.3rem);
+		letter-spacing: 0.04em;
+		line-height: 1.3;
+		color: var(--text-bright);
+		text-wrap: balance;
+	}
+	.pager__link:hover .pager__name {
+		color: var(--gold-light);
+	}
+	.pager__back {
+		margin-top: 1.5rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--rule);
+		text-align: center;
+		max-width: none;
+	}
+	.pager__back a {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 0.85rem;
+		letter-spacing: 0.22em;
+		text-transform: uppercase;
+		color: var(--gold);
+		border-bottom: 1px solid var(--gold-deep);
+		padding-bottom: 0.2rem;
+		transition: color 0.2s ease;
+	}
+	.pager__back a:hover {
+		color: var(--gold-light);
+	}
+	@media (max-width: 560px) {
+		.pager__row {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.pager__link--next {
+			text-align: left;
+			grid-column: auto;
+		}
+	}
+</style>

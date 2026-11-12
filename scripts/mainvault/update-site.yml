@@ -1,0 +1,49 @@
+# Reference copy. The live file is `.github/workflows/update-site.yml` in the
+# MainVault repo (ThatCakeIsAPie/MainVault). It does not run from this repo.
+#
+# When one of the Faleth Capital documents changes in the vault, this commits a
+# one-line marker (`.canon-rev`) to the website repo. That push triggers the
+# website's normal deploy, which fetches the documents fresh.
+#
+# Needs the MainVault repo secret SITE_DEPLOY_KEY: the private half of the
+# "MainVault document trigger" deploy key on the website repo (write access to
+# that one repo only).
+name: Update site when Faleth documents change
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Business/Faleth Capital/*.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-site
+  cancel-in-progress: false
+
+jobs:
+  mark:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the website repo
+        uses: actions/checkout@v4
+        with:
+          repository: ThatCakeIsAPie/thatcakeisapie.github.io
+          ref: main
+          ssh-key: ${{ secrets.SITE_DEPLOY_KEY }}
+
+      - name: Commit the marker
+        run: |
+          echo "${GITHUB_SHA}" > .canon-rev
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .canon-rev
+          if git diff --cached --quiet; then
+            echo "Marker already at ${GITHUB_SHA}; nothing to push."
+            exit 0
+          fi
+          git commit -m "Rebuild for Faleth document update (MainVault ${GITHUB_SHA::7})"
+          git push origin main

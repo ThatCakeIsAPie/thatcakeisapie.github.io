@@ -1,0 +1,164 @@
+---
+import { site } from '../content/site';
+import SectionHeading from './SectionHeading.astro';
+
+const { id, label, heading, items, workingLabel, working, linkLabel } = site.goals;
+const numerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+---
+
+<section class="goals" id={id} aria-labelledby={`${id}-h`}>
+	<div class="wrap slab glass glass--reading">
+		<SectionHeading label={label} id={`${id}-h`} />
+		{heading && <p class="display reveal">{heading}</p>}
+
+		<ol class="ledger">
+			{
+				items.map((g, i) => (
+					<li class="ledger__row reveal">
+						<span class="ledger__no" aria-hidden="true">{numerals[i]}</span>
+						<h3 class="ledger__title">{g.title}</h3>
+						<p class="ledger__text">{g.text}</p>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+
+	<div class="wrap slab glass glass--reading working__panel">
+		<h3 class="sublabel working__label">{workingLabel}</h3>
+		<ul class="working">
+			{
+				working.map((p) => (
+					<li class="working__row reveal">
+						<span class="ring" aria-hidden="true"></span>
+						<span class="working__name">{p.name}</span>
+						<span class="working__desc">{p.description}</span>
+						{p.link && (
+							<a class="working__link" href={p.link} rel="noopener">
+								{linkLabel}
+								<span aria-hidden="true"> →</span>
+							</a>
+						)}
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.goals {
+		margin-bottom: var(--panel-gap);
+	}
+	.display {
+		max-width: 28ch;
+		margin: -1rem auto clamp(2.5rem, 5vw, 4rem);
+		text-align: center;
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+		line-height: 1.25;
+		letter-spacing: 0.03em;
+		color: var(--text-bright);
+		text-wrap: balance;
+	}
+
+	/* Goals: roman numeral | title | sentence, ruled like a ledger */
+	.ledger {
+		border-top: 1px solid var(--gold-deep);
+	}
+	.ledger__row {
+		display: grid;
+		grid-template-columns: 5rem minmax(0, 4fr) minmax(0, 5fr);
+		column-gap: 2rem;
+		align-items: baseline;
+		padding-block: 2.25rem;
+		border-bottom: 1px solid var(--rule);
+	}
+	.ledger__no {
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: 1.6rem;
+		color: var(--gold);
+		letter-spacing: 0.06em;
+	}
+	.ledger__title {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--text-bright);
+		line-height: 1.25;
+	}
+	.ledger__text {
+		color: var(--text);
+	}
+
+	/* Working on: denser rows, hollow ring marker */
+	.working__panel {
+		margin-top: var(--panel-gap);
+	}
+	.working {
+		margin-top: 1.25rem;
+	}
+	.working__row {
+		display: grid;
+		grid-template-columns: 5rem minmax(0, 4fr) minmax(0, 5fr) auto;
+		column-gap: 2rem;
+		align-items: baseline;
+		padding-block: 1.35rem;
+		border-bottom: 1px solid var(--rule);
+	}
+	.ring {
+		width: 0.75rem;
+		height: 0.75rem;
+		border: 1.5px solid var(--gold);
+		border-radius: 50%;
+		align-self: center;
+	}
+	.working__name {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 1.1rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--gold-light);
+	}
+	.working__desc {
+		color: var(--text-dim);
+	}
+	.working__link {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 0.8rem;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		color: var(--gold);
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
+	}
+	.working__link:hover {
+		color: var(--gold-light);
+	}
+
+	@media (max-width: 760px) {
+		.ledger__row {
+			grid-template-columns: 3rem minmax(0, 1fr);
+			row-gap: 0.6rem;
+			padding-block: 1.75rem;
+		}
+		.ledger__text {
+			grid-column: 2;
+		}
+		.working__row {
+			grid-template-columns: 1.25rem minmax(0, 1fr);
+			row-gap: 0.25rem;
+		}
+		.working__desc,
+		.working__link {
+			grid-column: 2;
+		}
+	}
+</style>

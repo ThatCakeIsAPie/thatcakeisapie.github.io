@@ -1,0 +1,75 @@
+---
+import { site } from '../content/site';
+import SectionHeading from './SectionHeading.astro';
+
+const { label, intro, layers, closing } = site.faleth.pay;
+const numerals = ['I', 'II', 'III', 'IV'];
+---
+
+<section class="pay" aria-labelledby="pay-h">
+	<div class="wrap slab glass glass--reading">
+		<SectionHeading label={label} id="pay-h" />
+		<div class="pay__grid">
+			<div class="pay__lede reveal">
+				<p class="pay__intro">{intro}</p>
+				<p class="pay__closing">{closing}</p>
+			</div>
+			<ol class="path pay__path">
+				{
+					layers.map((l, i) => (
+						<li class="path__item reveal">
+							<span class="node" aria-hidden="true">{numerals[i]}</span>
+							<div class="path__body">
+								<h3 class="path__title">{l.title}</h3>
+								<p>{l.text}</p>
+							</div>
+						</li>
+					))
+				}
+			</ol>
+		</div>
+	</div>
+</section>
+
+<style>
+	.pay {
+		margin-bottom: var(--panel-gap);
+	}
+	.pay__grid {
+		display: grid;
+		grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+		gap: clamp(2.5rem, 7vw, 6rem);
+		align-items: start;
+	}
+	.pay__lede {
+		position: sticky;
+		top: calc(var(--header-h) + 2.5rem);
+	}
+	.pay__intro {
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: clamp(1.7rem, 3vw, 2.4rem);
+		line-height: 1.25;
+		letter-spacing: 0.03em;
+		color: var(--text-bright);
+		text-wrap: balance;
+	}
+	.pay__closing {
+		margin-top: 2rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--rule);
+		color: var(--text);
+	}
+	@media (max-width: 900px) {
+		.pay__grid {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 2.5rem;
+		}
+		.pay__lede {
+			position: static;
+		}
+		.pay__closing {
+			margin-top: 1.5rem;
+		}
+	}
+</style>

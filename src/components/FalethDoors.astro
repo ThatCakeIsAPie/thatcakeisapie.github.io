@@ -1,0 +1,84 @@
+---
+import { site } from '../content/site';
+import SectionHeading from './SectionHeading.astro';
+
+const { label, items } = site.faleth.doors;
+---
+
+<section class="doors" aria-labelledby="doors-h">
+	<div class="wrap slab glass glass--reading">
+		<SectionHeading label={label} id="doors-h" />
+		<ul class="doors__list">
+			{
+				items.map((d) => (
+					<li class="door reveal">
+						<div class="door__head">
+							<h3 class="door__title">{d.title}</h3>
+							{d.tag && <span class="tag">{d.tag}</span>}
+						</div>
+						<p class="door__text">{d.text}</p>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.doors {
+		margin-bottom: var(--panel-gap);
+	}
+	.doors__list {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		border-top: 1px solid var(--gold-deep);
+	}
+	.door {
+		padding: clamp(1.75rem, 3vw, 2.5rem) clamp(1.25rem, 2.6vw, 2.25rem) 0;
+	}
+	.door + .door {
+		border-left: 1px solid var(--rule);
+	}
+	.door:first-child {
+		padding-left: 0;
+	}
+	.door:last-child {
+		padding-right: 0;
+	}
+	.door__head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem 0.9rem;
+		margin-bottom: 1rem;
+	}
+	.door__title {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: clamp(1.5rem, 2.6vw, 2rem);
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--gold);
+		line-height: 1.2;
+	}
+	.door__text {
+		color: var(--text);
+	}
+	@media (max-width: 900px) {
+		.doors__list {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.door,
+		.door:first-child,
+		.door:last-child {
+			padding: 1.75rem 0;
+		}
+		.door + .door {
+			border-left: 0;
+			border-top: 1px solid var(--rule);
+		}
+		.door:last-child {
+			padding-bottom: 0;
+		}
+	}
+</style>

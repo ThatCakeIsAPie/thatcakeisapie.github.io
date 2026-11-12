@@ -1,5 +1,9 @@
 name: Deploy to GitHub Pages
 
+# Deploys on every push to main. When a Faleth Capital document changes in the MainVault repo, a workflow
+# there commits the one-line marker file `.canon-rev` to this repo's main branch; that push is what
+# triggers a rebuild (the build fetches the documents fresh). "Run workflow" on the Actions tab rebuilds
+# manually.
 on:
   push:
     branches: [main]
@@ -10,6 +14,7 @@ permissions:
   pages: write
   id-token: write
 
+# Overlapping runs queue instead of racing; a run already deploying is never cancelled.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -24,7 +29,10 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run build
+      - name: Build (fetches the Faleth Capital documents first)
+        run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

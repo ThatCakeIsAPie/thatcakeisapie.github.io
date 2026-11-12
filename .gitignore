@@ -1,5 +1,8 @@
 # build output
 dist/
+# Faleth Capital documents fetched from GitHub at build time (npm run canon)
+.canon/
+
 # generated types
 .astro/
 
@@ -22,3 +25,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Cloudflare Worker (worker/)
+.dev.vars
+.dev.vars.*
+.wrangler/
+worker/worker-configuration.d.ts

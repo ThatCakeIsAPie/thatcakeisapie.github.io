@@ -1,0 +1,22 @@
+---
+import { socialIcons } from './icons';
+import type { SocialId } from '../content/site';
+
+interface Props {
+	id: SocialId;
+	class?: string;
+}
+const { id, class: className } = Astro.props;
+---
+
+<svg class:list={['social-icon', className]} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+	<path d={socialIcons[id]} fill="currentColor"></path>
+</svg>
+
+<style>
+	.social-icon {
+		width: 1.25rem;
+		height: 1.25rem;
+		flex: none;
+	}
+</style>

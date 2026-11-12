@@ -1,0 +1,87 @@
+---
+/**
+ * Section heading. With `title`, the label is the small eyebrow and the title is the h2.
+ * Without `title`, the label itself is the h2.
+ * Label is flanked by thin gold rules.
+ */
+interface Props {
+	label: string;
+	title?: string;
+	intro?: string;
+	align?: 'center' | 'start';
+	id?: string;
+	/** Make the title the page's h1 (page headers) instead of an h2. */
+	h1?: boolean;
+}
+const { label, title, intro, align = 'center', id, h1 = false } = Astro.props;
+const Label = title ? 'p' : 'h2';
+const Title = h1 ? 'h1' : 'h2';
+---
+
+<header class:list={['sh', `sh--${align}`]}>
+	<Label class="sh__label" id={title ? undefined : id}><span>{label}</span></Label>
+	{title && <Title class="sh__title" id={id}>{title}</Title>}
+	{intro && <p class="sh__intro">{intro}</p>}
+</header>
+
+<style>
+	.sh {
+		display: grid;
+		justify-items: center;
+		text-align: center;
+		gap: 1.5rem;
+		margin-bottom: clamp(2.5rem, 5vw, 4rem);
+	}
+	.sh--start {
+		justify-items: start;
+		text-align: left;
+	}
+	.sh__label {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+		width: 100%;
+		max-width: 34rem;
+		margin: 0;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 1.05rem;
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		color: var(--gold);
+	}
+	.sh__label::before,
+	.sh__label::after {
+		content: '';
+		flex: 1;
+		height: 1px;
+		background: var(--gold-deep);
+		opacity: 0.75;
+	}
+	.sh__label span {
+		text-indent: 0.28em; /* balance trailing letter-spacing */
+		text-align: center;
+	}
+	.sh__title {
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: clamp(2.25rem, 6vw, 4rem);
+		line-height: 1.1;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--gold);
+		text-wrap: balance;
+	}
+	.sh__intro {
+		font-size: 1.2rem;
+		color: var(--text);
+		text-wrap: balance;
+	}
+	@media (max-width: 480px) {
+		.sh__label {
+			font-size: 0.9rem;
+			letter-spacing: 0.22em;
+			gap: 0.9rem;
+		}
+	}
+</style>

@@ -1,0 +1,85 @@
+---
+import { site } from '../content/site';
+import SectionHeading from './SectionHeading.astro';
+
+const { label, text, mustLabel, must, closing } = site.faleth.office;
+const numerals = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+---
+
+<section class="office" aria-labelledby="office-h">
+	<div class="wrap slab glass glass--reading">
+		<SectionHeading label={label} id="office-h" />
+		<div class="office__grid">
+			<p class="office__text reveal">{text}</p>
+			<div class="must reveal">
+				<h3 class="sublabel">{mustLabel}</h3>
+				<ol class="must__list">
+					{
+						must.map((m, i) => (
+							<li class="must__row">
+								<span class="must__no" aria-hidden="true">{numerals[i]}</span>
+								<span>{m}</span>
+							</li>
+						))
+					}
+				</ol>
+			</div>
+		</div>
+		<p class="office__closing reveal">{closing}</p>
+	</div>
+</section>
+
+<style>
+	.office {
+		margin-bottom: var(--panel-gap);
+	}
+	.office__grid {
+		display: grid;
+		grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+		gap: clamp(2.5rem, 6vw, 5rem);
+		align-items: start;
+	}
+	.office__text {
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+		line-height: 1.4;
+		letter-spacing: 0.02em;
+		color: var(--text-bright);
+		text-wrap: balance;
+	}
+	.must__list {
+		margin-top: 0.5rem;
+	}
+	.must__row {
+		display: grid;
+		grid-template-columns: 3.25rem minmax(0, 1fr);
+		align-items: baseline;
+		padding-block: 1.1rem;
+		border-bottom: 1px solid var(--rule);
+	}
+	.must__row:first-child {
+		border-top: 1px solid var(--gold-deep);
+		margin-top: 0.75rem;
+	}
+	.must__no {
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: 1.1rem;
+		letter-spacing: 0.06em;
+		color: var(--gold);
+	}
+	.office__closing {
+		max-width: 52rem;
+		margin-top: clamp(2.5rem, 5vw, 4rem);
+		padding-top: clamp(1.75rem, 3vw, 2.5rem);
+		border-top: 1px solid var(--rule);
+		color: var(--text);
+	}
+	@media (max-width: 900px) {
+		.office__grid {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 2.25rem;
+		}
+	}
+</style>

@@ -1,0 +1,31 @@
+---
+import { site } from '../content/site';
+import SectionHeading from './SectionHeading.astro';
+
+const { label, text } = site.faleth.doing;
+---
+
+<section class="doing" aria-labelledby="doing-h">
+	<div class="wrap slab glass glass--reading doing__panel">
+		<SectionHeading label={label} id="doing-h" />
+		<p class="doing__text reveal">{text}</p>
+	</div>
+</section>
+
+<style>
+	.doing {
+		margin-bottom: var(--panel-gap);
+	}
+	.doing__panel {
+		width: min(100% - 2 * var(--gutter), 56rem);
+	}
+	.doing__text {
+		margin-inline: auto;
+		max-width: 44rem;
+		text-align: center;
+		font-size: 1.2rem;
+		font-weight: 300;
+		line-height: 1.75;
+		text-wrap: balance;
+	}
+</style>

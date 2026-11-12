@@ -1,0 +1,52 @@
+---
+import { site } from '../content/site';
+import SectionHeading from './SectionHeading.astro';
+
+const { label, classes, closing } = site.faleth.ownership;
+---
+
+<section class="own" aria-labelledby="own-h">
+	<div class="slab glass glass--reading own__panel">
+		<SectionHeading label={label} id="own-h" />
+		<ul class="own__list">
+			{
+				classes.map((c) => (
+					<li class="own__item reveal">
+						<h3 class="own__title">{c.title}</h3>
+						<p>{c.text}</p>
+					</li>
+				))
+			}
+		</ul>
+		<p class="own__closing reveal">{closing}</p>
+	</div>
+</section>
+
+<style>
+	.own,
+	.own__panel {
+		height: 100%;
+	}
+	.own__list {
+		border-top: 1px solid var(--gold-deep);
+	}
+	.own__item {
+		padding-block: 1.75rem;
+		border-bottom: 1px solid var(--rule);
+	}
+	.own__title {
+		margin-bottom: 0.6rem;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--gold);
+		line-height: 1.2;
+	}
+	.own__closing {
+		margin-top: 1.5rem;
+		font-size: 1rem;
+		color: var(--text-dim);
+	}
+</style>

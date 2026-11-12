@@ -1,0 +1,98 @@
+---
+import { site } from '../content/site';
+
+const f = site.faleth;
+---
+
+<section class="faleth" aria-labelledby="faleth-title">
+	<div class="wrap faleth__in slab glass glass--reading">
+		<h1 id="faleth-title" class="wordmark" aria-label={`${f.name} ${f.sub}`}>
+			<span class="wordmark__big" aria-hidden="true">{f.name}</span>
+			<span class="wordmark__sub" aria-hidden="true">
+				<span class="wordmark__rule"></span>
+				<span>{f.sub}</span>
+				<span class="wordmark__rule"></span>
+			</span>
+		</h1>
+		<p class="statement reveal">{f.statement}</p>
+		<p class="lede reveal">{f.lede}</p>
+		<p class="note reveal">{f.note}</p>
+	</div>
+</section>
+
+<style>
+	.faleth {
+		padding-top: calc(var(--header-h) + var(--panel-gap));
+		margin-bottom: var(--panel-gap);
+	}
+	/* No foreground mark: it already glows in the backdrop. One glass panel carries the wordmark and lede. */
+	.faleth__in {
+		width: min(100% - 2 * var(--gutter), 56rem);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		padding-block: clamp(2.5rem, 6vw, 5rem);
+	}
+	.wordmark {
+		display: inline-flex;
+		flex-direction: column;
+		align-items: stretch;
+		font-family: var(--font-display);
+		color: var(--gold);
+		font-weight: 500;
+		text-transform: uppercase;
+	}
+	.wordmark__big {
+		font-size: clamp(2.9rem, 11vw, 6.5rem);
+		letter-spacing: 0.22em;
+		text-indent: 0.22em;
+		line-height: 1;
+	}
+	.wordmark__sub {
+		display: flex;
+		align-items: center;
+		gap: clamp(0.9rem, 2vw, 1.5rem);
+		margin-top: clamp(0.6rem, 1.5vw, 1rem);
+		font-size: clamp(1.15rem, 4vw, 2.1rem);
+		letter-spacing: 0.34em;
+		text-indent: 0.34em;
+		line-height: 1;
+		color: var(--gold);
+	}
+	.wordmark__rule {
+		flex: 1;
+		height: 1px;
+		background: var(--gold-deep);
+	}
+	.statement {
+		margin-top: clamp(2.25rem, 5vw, 3.5rem);
+		max-width: 30ch;
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: clamp(1.45rem, 3vw, 2.15rem);
+		line-height: 1.25;
+		letter-spacing: 0.03em;
+		color: var(--text-bright);
+		text-wrap: balance;
+	}
+	.lede {
+		margin-top: 1.5rem;
+		max-width: 34rem;
+		font-size: clamp(1.3rem, 2.4vw, 1.65rem);
+		font-weight: 300;
+		line-height: 1.5;
+		color: var(--text-bright);
+		text-wrap: balance;
+	}
+	.note {
+		margin-top: 1.75rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--rule);
+		max-width: 32rem;
+		font-size: 1rem;
+		line-height: 1.7;
+		color: var(--text-dim);
+		text-wrap: balance;
+	}
+</style>

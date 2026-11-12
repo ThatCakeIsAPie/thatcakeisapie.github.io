@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import HeroesIntro from '../components/HeroesIntro.astro';
+import HeroesCode from '../components/HeroesCode.astro';
+import HeroesClose from '../components/HeroesClose.astro';
+import { site } from '../content/site';
+---
+
+<Base title={site.heroes.title} description={site.heroes.description}>
+	<HeroesIntro />
+	<HeroesCode />
+	<HeroesClose />
+</Base>

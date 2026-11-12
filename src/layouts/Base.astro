@@ -1,10 +1,19 @@
 ---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../content/site';
+import { markPath, markViewBox } from '../lib/mark';
+
 interface Props {
-	title: string;
+	title?: string;
 	description?: string;
 }
 
-const { title, description = 'Personal website of Lyle Cole.' } = Astro.props;
+const { title = site.meta.title, description = site.meta.description } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og.png', Astro.site);
 ---
 
 <!doctype html>
@@ -12,73 +21,68 @@ const { title, description = 'Personal website of Lyle Cole.' } = Astro.props;
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="description" content={description} />
-		<meta name="generator" content={Astro.generator} />
+		<script is:inline>
+			document.documentElement.classList.add('js');
+		</script>
 		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="theme-color" content="#142423" />
+		<link rel="canonical" href={canonical} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="preload" as="image" type="image/webp" href="/brand/stained-glass.webp" media="(min-width: 761px) and (min-aspect-ratio: 10001/10000)" />
+		<link rel="preload" as="image" type="image/webp" href="/brand/stained-glass-portrait.webp" media="(max-width: 760px), (max-aspect-ratio: 1/1)" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={site.meta.title} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
+		<meta name="generator" content={Astro.generator} />
 	</head>
-	<body>
-		<main>
+	<body id="top">
+		<div class="backdrop" aria-hidden="true"></div>
+		<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+			<symbol id="mark" viewBox={markViewBox}>
+				<path fill="currentColor" fill-rule="evenodd" d={markPath}></path>
+			</symbol>
+		</svg>
+		<a class="skip-link" href="#main">Skip to content</a>
+		<Header />
+		<main id="main">
 			<slot />
 		</main>
+		<Footer />
+
+		<script is:inline>
+			(function () {
+				var items = document.querySelectorAll('.reveal');
+				if (!items.length) return;
+				if (!('IntersectionObserver' in window)) {
+					items.forEach(function (el) { el.classList.add('is-in'); });
+					return;
+				}
+				var io = new IntersectionObserver(
+					function (entries) {
+						entries.forEach(function (e) {
+							if (e.isIntersecting) {
+								e.target.classList.add('is-in');
+								io.unobserve(e.target);
+							}
+						});
+					},
+					{ rootMargin: '0px 0px -8% 0px', threshold: 0.05 }
+				);
+				items.forEach(function (el) { io.observe(el); });
+			})();
+		</script>
 	</body>
 </html>
-
-<style is:global>
-	:root {
-		color-scheme: light dark;
-		--bg: #fbfaf8;
-		--text: #1c1b19;
-		--muted: #6b6860;
-		--accent: #b4521e;
-	}
-
-	@media (prefers-color-scheme: dark) {
-		:root {
-			--bg: #161514;
-			--text: #ece9e3;
-			--muted: #9a968c;
-			--accent: #f0935c;
-		}
-	}
-
-	* {
-		box-sizing: border-box;
-	}
-
-	body {
-		margin: 0;
-		background: var(--bg);
-		color: var(--text);
-		font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-		font-size: 1.0625rem;
-		line-height: 1.6;
-	}
-
-	main {
-		max-width: 40rem;
-		margin: 0 auto;
-		padding: 18vh 1.25rem 4rem;
-	}
-
-	h1 {
-		margin: 0 0 0.5rem;
-		font-size: clamp(2.25rem, 7vw, 3.25rem);
-		line-height: 1.1;
-		letter-spacing: -0.02em;
-	}
-
-	p {
-		margin: 0 0 1rem;
-	}
-
-	a {
-		color: var(--accent);
-		text-underline-offset: 0.2em;
-	}
-
-	.muted {
-		color: var(--muted);
-	}
-</style>

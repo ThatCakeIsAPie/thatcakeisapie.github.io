@@ -1,0 +1,29 @@
+---
+import { markSize } from '../lib/mark';
+
+interface Props {
+	class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<svg
+	class:list={['mark', className]}
+	viewBox={`0 0 ${markSize.w} ${markSize.h}`}
+	aria-hidden="true"
+	focusable="false"
+>
+	<use href="#mark" width="100%" height="100%"></use>
+</svg>
+
+<style>
+	.mark {
+		display: block;
+		height: 1em;
+		width: auto;
+		aspect-ratio: 1549 / 1780;
+		color: var(--gold);
+		fill: currentColor;
+		flex: none;
+	}
+</style>

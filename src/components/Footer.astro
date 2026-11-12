@@ -1,0 +1,37 @@
+---
+import { site } from '../content/site';
+import Mark from './Mark.astro';
+---
+
+<footer class="footer">
+	<div class="wrap footer__in glass glass--reading">
+		<Mark class="footer__mark" />
+		<p>{site.footer.text}</p>
+	</div>
+</footer>
+
+<style>
+	/* Slim glass strip on the backdrop. */
+	.footer {
+		padding-bottom: clamp(1.25rem, 3vw, 2.5rem);
+	}
+	.footer__in {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 1.5rem var(--gutter);
+	}
+	.footer__in :global(.footer__mark) {
+		height: 2rem;
+		opacity: 0.85;
+	}
+	p {
+		font-family: var(--font-display);
+		font-size: 0.8rem;
+		font-weight: 500;
+		letter-spacing: 0.2em;
+		color: var(--text-dim);
+		text-align: center;
+	}
+</style>

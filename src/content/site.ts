@@ -1,0 +1,376 @@
+/**
+ * All copy and links for the site live in this one file.
+ * Edit text here; components never contain wording.
+ *
+ * Fields marked `// PLACEHOLDER` are lorem ipsum waiting for real copy.
+ * Everything else is real and final.
+ */
+import type { ImageMetadata } from 'astro';
+
+export type SocialId = 'x' | 'instagram' | 'youtube' | 'tiktok' | 'github';
+
+export interface Social {
+	id: SocialId;
+	name: string;
+	handle: string;
+	href: string;
+}
+
+export interface AffiliateLink {
+	title: string;
+	description: string;
+	href: string;
+}
+
+export interface Chapter {
+	title: string;
+	text: string;
+}
+
+export interface Goal {
+	title: string;
+	text: string;
+}
+
+export interface Project {
+	name: string;
+	description: string;
+	/** Optional. `null` hides the link. */
+	link: string | null;
+}
+
+export const site = {
+	meta: {
+		title: 'Lyle Cole',
+		description: 'Personal site of Lyle Cole.',
+	},
+
+	/** Top bar. Name sits in the centre, one tab each side. */
+	nav: {
+		name: 'Lyle Cole',
+		left: { label: 'Heroes', href: '/heroes/' },
+		right: { label: 'Faleth', href: '/faleth/' },
+	},
+
+	person: {
+		name: 'Lyle Cole',
+		// PLACEHOLDER
+		descriptor: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do.',
+		/**
+		 * Set to an imported image to show a portrait, e.g.
+		 *   import portrait from '../assets/lyle.jpg';
+		 *   photo: portrait,
+		 * Put the file in src/assets/. Leave `null` to show the placeholder frame.
+		 */
+		photo: null as ImageMetadata | null,
+		photoAlt: 'Portrait of Lyle Cole',
+		photoPlaceholderLabel: 'Photo',
+	},
+
+	landing: {
+		useLabel: 'What I use',
+		/** Append more objects here to add more links. */
+		links: [
+			{
+				title: 'MyShop',
+				description: 'Where I buy my supplements.',
+				href: 'https://www.amway.com/en_US/myshop/ColeHolistics',
+			},
+			{
+				title: 'Avellum Health',
+				description: 'Where I get my peptides.',
+				href: 'https://www.avellumhealth.com/',
+			},
+			{
+				title: 'Valdura',
+				description: 'The app I use to monitor my health.',
+				href: 'https://www.valdura.health/',
+			},
+		] as AffiliateLink[],
+		/** Set to '' to hide. */
+		affiliateNote: 'I may earn from some of these links.',
+		findLabel: 'Find me',
+	},
+
+	socials: [
+		{ id: 'x', name: 'X', handle: '@LyleBCole', href: 'https://x.com/LyleBCole' },
+		{
+			id: 'instagram',
+			name: 'Instagram',
+			handle: '@lyle.cole.12',
+			href: 'https://www.instagram.com/lyle.cole.12',
+		},
+		{
+			id: 'youtube',
+			name: 'YouTube',
+			handle: '@ThatCakeIsAPie',
+			href: 'https://www.youtube.com/@ThatCakeIsAPie',
+		},
+		{
+			id: 'tiktok',
+			name: 'TikTok',
+			handle: '@lyle.cole95',
+			href: 'https://www.tiktok.com/@lyle.cole95',
+		},
+		{
+			id: 'github',
+			name: 'GitHub',
+			handle: 'ThatCakeIsAPie',
+			href: 'https://github.com/ThatCakeIsAPie',
+		},
+	] as Social[],
+
+	story: {
+		id: 'story',
+		label: 'My story',
+		// PLACEHOLDER (optional display heading; set to '' to hide)
+		heading: 'Lorem ipsum dolor sit amet consectetur.',
+		// PLACEHOLDER
+		intro:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
+		chapters: [
+			{
+				// PLACEHOLDER
+				title: 'Lorem ipsum',
+				text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam quis nostrud.',
+			},
+			{
+				// PLACEHOLDER
+				title: 'Dolor sit amet',
+				text: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.',
+			},
+			{
+				// PLACEHOLDER
+				title: 'Consectetur elit',
+				text: 'Sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque.',
+			},
+			{
+				// PLACEHOLDER
+				title: 'Tempor incididunt',
+				text: 'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi.',
+			},
+		] as Chapter[],
+	},
+
+	goals: {
+		id: 'goals',
+		label: 'Goals',
+		// PLACEHOLDER (optional display heading; set to '' to hide)
+		heading: 'Ut enim ad minima veniam quis.',
+		items: [
+			{
+				// PLACEHOLDER
+				title: 'Lorem ipsum dolor',
+				text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
+			},
+			{
+				// PLACEHOLDER
+				title: 'Sit amet consectetur',
+				text: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+			},
+			{
+				// PLACEHOLDER
+				title: 'Adipiscing elit',
+				text: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+			},
+		] as Goal[],
+		workingLabel: 'What I am working on',
+		working: [
+			{
+				// PLACEHOLDER
+				name: 'Lorem Ipsum',
+				description: 'Dolor sit amet consectetur adipiscing elit.',
+				link: null,
+			},
+			{
+				// PLACEHOLDER
+				name: 'Dolor Sit',
+				description: 'Sed do eiusmod tempor incididunt ut labore.',
+				link: null,
+			},
+			{
+				// PLACEHOLDER
+				name: 'Amet Elit',
+				description: 'Ut enim ad minim veniam quis nostrud.',
+				link: null,
+			},
+		] as Project[],
+		linkLabel: 'Visit',
+	},
+
+	contact: {
+		id: 'contact',
+		label: 'Get in touch',
+		// PLACEHOLDER (optional display heading; set to '' to hide)
+		heading: 'Lorem ipsum dolor sit amet.',
+		// PLACEHOLDER
+		text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. The quickest way to reach me is through any of the places below.',
+		form: {
+			// Worker that validates, spam-checks and stores submissions (worker/). The env override is for local previews only.
+			endpoint: import.meta.env.PUBLIC_CONTACT_ENDPOINT || 'https://coleholistics-contact.lylecole.workers.dev/contact',
+			// Public Turnstile site key (not a secret). Widget: "coleholistics.us contact form".
+			turnstileSiteKey: import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAAF9eeUGjN6A5WYDC',
+			nameLabel: 'Name',
+			phoneLabel: 'Phone',
+			emailLabel: 'Email (optional)',
+			honeypotLabel: 'Company',
+			button: 'Send',
+			sending: 'Sending…',
+			note: 'I’ll only use this to get back to you.',
+			success: 'Thanks. I’ll be in touch.',
+			error: 'That didn’t go through. Try again, or reach me through any of the links below.',
+			noscript: 'This form needs JavaScript. Reach me through any of the links below.',
+			// Field-level messages; the client mirrors the server's rules (worker/src/validate.ts).
+			errors: {
+				name_required: 'Please enter your name.',
+				name_too_long: 'That name is too long (100 characters at most).',
+				phone_required: 'Please enter a phone number.',
+				phone_invalid: 'Enter a valid phone number: 7 to 15 digits, with an optional + at the start.',
+				email_invalid: 'That email address doesn’t look right.',
+				email_too_long: 'That email address is too long.',
+			},
+		},
+	},
+
+	footer: {
+		text: '© 2026 Lyle Cole',
+	},
+
+	/** /heroes/ : real copy, used as written. No figures, no pin levels, no testimonials. */
+	heroes: {
+		title: 'Heroes · Lyle Cole',
+		description: 'Personal site of Lyle Cole.',
+		label: 'Team Heroes',
+		heading: 'The Journey',
+		intro:
+			'Heroes is my network marketing team. The name comes from the hero’s journey: each person is the hero of their own growth story, and the team is the dojo where they train.',
+		code: {
+			label: 'The Code',
+			lines: [
+				'Fruit first.',
+				'Customers before team.',
+				'The door stays open.',
+				'Give away what scales.',
+				'Be here by choice.',
+			],
+		},
+		looking: {
+			label: 'Who I’m looking for',
+			text: 'People who want agency and ownership, are coachable, have a mentor posture and could become future operators.',
+			not: 'Not: pin-chasers, hype buyers, or anyone who needs “guaranteed”, “passive” or “investment” framing.',
+		},
+		closing: {
+			text: 'The business conversation comes only if you ask, and always privately.',
+			linkLabel: 'Get in touch',
+			href: '/#contact',
+		},
+	},
+
+	/** /faleth/ : real copy, used as written. */
+	faleth: {
+		title: 'Faleth Capital · Lyle Cole',
+		description: 'A family office. It buys and holds operating businesses and never flips them.',
+		name: 'Faleth',
+		sub: 'Capital',
+		statement: 'Faleth Capital is what I’m building toward.',
+		lede: 'A family office. It buys and holds operating businesses and never flips them.',
+		note: 'The name comes from “Fah Leth”, meaning individual. The organization should strengthen a person’s agency, not swallow it.',
+		mission: {
+			label: 'Mission',
+			text: 'Create and steward generational wealth. Make it reachable for people who never had a path to it, and prove that paying for value beats paying for time.',
+		},
+		doors: {
+			label: 'Three doors',
+			items: [
+				{ title: 'Build', text: 'Work in a subsidiary and earn Class B. No capital needed.', tag: '' },
+				{ title: 'Invest', text: 'Open a Managed Capital Account.', tag: 'Not offered yet' },
+				{
+					title: 'Refer',
+					text: 'Earn referral credits: 20% of what a referred customer spends, for as long as they keep spending. Credits never expire, and it runs only one level deep. Refer five customers who spend what you spend and your own service is free.',
+					tag: '',
+				},
+			],
+		},
+		office: {
+			label: 'The office and subsidiaries',
+			text: 'The office is a thin parent. Its own people run each subsidiary with full autonomy over hiring, pricing, strategy and culture.',
+			mustLabel: 'Every subsidiary must',
+			must: [
+				'Pay people under the Contribution Framework, not wages.',
+				'Pay the office fee.',
+				'Report its financials quarterly.',
+				'Make Class B available to everyone who participates.',
+			],
+			closing: 'Once a subsidiary outgrows one team, it splits into cells: small, self-governing teams that each run the same system. Businesses can be built from scratch or acquired.',
+		},
+		pay: {
+			label: 'How people are paid',
+			intro: 'No wages. People are owners, not employees.',
+			layers: [
+				{ title: 'Floor', text: 'A modest guaranteed weekly minimum that removes survival anxiety.' },
+				{ title: 'Value share', text: 'Pay per job, based on the points each person put into it. This is most of their pay.' },
+				{ title: 'Ownership stake', text: 'A share of the profit their work produces.' },
+			],
+			closing: 'No time clock. People set their own hours. The points system is checked for fairness every quarter.',
+		},
+		ownership: {
+			label: 'Ownership',
+			classes: [
+				{ title: 'Class A', text: 'The vote. You can’t buy it. A founder earns it once their subsidiary is profitable for eight straight quarters.' },
+				{ title: 'Class B', text: 'Earned dividends with no vote. It’s minted only from earned gain share, never bought. You can cash out at book value anytime, and it goes with you if you leave.' },
+			],
+			closing: 'Book value is assets minus liabilities minus unrealized gains.',
+		},
+		governance: {
+			label: 'Governance and exit',
+			items: [
+				{ lead: 'Radical transparency.', text: 'Every participant sees the financials every quarter.' },
+				{ lead: 'Peaceful fork:', text: 'anyone can leave and take what they built, valued at book value. There’s no trapping, and earned stakes travel with the person.' },
+			],
+		},
+		buckets: {
+			label: 'Two buckets',
+			items: [
+				{ title: 'Bucket One', text: 'The safety net: land, real estate and index funds.' },
+				{ title: 'Bucket Two', text: 'Active income: pay, gain share and dividends.' },
+			],
+		},
+		steps: {
+			label: 'The five steps',
+			items: [
+				'Start in network marketing. It’s the leadership dojo.',
+				'Maximize active income through current work or a Faleth subsidiary.',
+				'Build the network to full-time, until it funds Bucket One on its own.',
+				'Build your own subsidiary. The office funds it and a member mentors it.',
+				'Grow both indefinitely. Earn Class A and mentor the next person.',
+			],
+			/** Attached under step I. `linkLabel` is the linked word; `rest` follows it. */
+			firstNote: { linkLabel: 'Heroes', href: '/heroes/', rest: ', my optional network marketing team, is one example of what that can look like.' },
+			closing: 'The five steps aren’t a requirement. Not everyone walks all five, and that’s fine. At every step the barrier is effort and time, not capital or connections.',
+		},
+		doing: {
+			label: 'What I’m doing',
+			text: 'I’m building the first version. Early on, I set the culture by example. Later, I remove restrictions so incentives keep the system healthy. People are the most important resource. The best people produce the best results, so I am strict about doing right by them.',
+		},
+		/** The nine documents (fetched at build time from GitHub, see README); this is only the list's chrome. */
+		documents: {
+			label: 'The documents',
+			text: 'The nine documents this page is drawn from. Where they differ from this page, they win.',
+			updated: 'Updated',
+		},
+		/** Chrome of the document pages at /faleth/<slug>/. */
+		doc: {
+			eyebrow: 'Faleth Capital · Document',
+			titleSuffix: 'Faleth Capital · Lyle Cole',
+			descriptionFallback: 'A Faleth Capital document.',
+			updated: 'Updated',
+			tocLabel: 'On this page',
+			prev: 'Previous',
+			next: 'Next',
+			back: 'Back to Faleth',
+			pagerLabel: 'Other Faleth Capital documents',
+		},
+	},
+};
+
+export type Site = typeof site;
