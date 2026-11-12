@@ -14,21 +14,29 @@ import FalethDocuments from '../components/FalethDocuments.astro';
 import { site } from '../content/site';
 ---
 
-<Base title={site.faleth.title} description={site.faleth.description}>
-	<FalethPage />
-	<FalethMission />
-	<FalethDoors />
-	<FalethOffice />
-	<FalethPay />
-	<div class="wrap pair">
-		<FalethOwnership />
-		<FalethGovernance />
-	</div>
-	<FalethBuckets />
-	<FalethSteps />
-	<FalethDoing />
-	<FalethDocuments />
-</Base>
+{
+	site.faleth.revealed ? (
+		<Base title={site.faleth.title} description={site.faleth.description}>
+			<FalethPage />
+			<FalethMission />
+			<FalethDoors />
+			<FalethOffice />
+			<FalethPay />
+			<div class="wrap pair">
+				<FalethOwnership />
+				<FalethGovernance />
+			</div>
+			<FalethBuckets />
+			<FalethSteps />
+			<FalethDoing />
+			<FalethDocuments />
+		</Base>
+	) : (
+		<Base title={site.faleth.title} description={site.faleth.teaser.description}>
+			<FalethPage teaser />
+		</Base>
+	)
+}
 
 <style>
 	/* Two small panels side by side on desktop; stacked (with the usual gap) on narrow screens. */

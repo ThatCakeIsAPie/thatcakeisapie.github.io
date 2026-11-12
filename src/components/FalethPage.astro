@@ -1,10 +1,15 @@
 ---
 import { site } from '../content/site';
 
+interface Props {
+	/** Teaser: the wordmark and one line only, centred in the viewport. */
+	teaser?: boolean;
+}
+const { teaser = false } = Astro.props;
 const f = site.faleth;
 ---
 
-<section class="faleth" aria-labelledby="faleth-title">
+<section class:list={['faleth', teaser && 'faleth--teaser']} aria-labelledby="faleth-title">
 	<div class="wrap faleth__in slab glass glass--reading">
 		<h1 id="faleth-title" class="wordmark" aria-label={`${f.name} ${f.sub}`}>
 			<span class="wordmark__big" aria-hidden="true">{f.name}</span>
@@ -14,9 +19,17 @@ const f = site.faleth;
 				<span class="wordmark__rule"></span>
 			</span>
 		</h1>
-		<p class="statement reveal">{f.statement}</p>
-		<p class="lede reveal">{f.lede}</p>
-		<p class="note reveal">{f.note}</p>
+		{
+			teaser ? (
+				<p class="statement reveal">{f.teaser.line}</p>
+			) : (
+				<>
+					<p class="statement reveal">{f.statement}</p>
+					<p class="lede reveal">{f.lede}</p>
+					<p class="note reveal">{f.note}</p>
+				</>
+			)
+		}
 	</div>
 </section>
 
@@ -24,6 +37,14 @@ const f = site.faleth;
 	.faleth {
 		padding-top: calc(var(--header-h) + var(--panel-gap));
 		margin-bottom: var(--panel-gap);
+	}
+	/* Teaser: the single panel sits in the middle of the first screen. */
+	.faleth--teaser {
+		min-height: calc(100svh - var(--panel-gap));
+		display: grid;
+		align-content: center;
+		padding-bottom: var(--panel-gap);
+		margin-bottom: 0;
 	}
 	/* No foreground mark: it already glows in the backdrop. One glass panel carries the wordmark and lede. */
 	.faleth__in {

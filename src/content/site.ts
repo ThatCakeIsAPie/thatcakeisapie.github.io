@@ -303,6 +303,15 @@ export const site = {
 
 	/** /faleth/ : real copy, used as written. */
 	faleth: {
+		/**
+		 * false: /faleth/ shows only the teaser below, and the nine document pages are not built.
+		 * true: the full page and the documents are published again. Everything under this block is kept for that.
+		 */
+		revealed: false,
+		teaser: {
+			description: 'Faleth Capital. To be revealed soon.',
+			line: 'To be revealed soon.',
+		},
 		title: 'Faleth Capital · Lyle Cole',
 		description: 'A family office. It buys and holds operating businesses and never flips them.',
 		name: 'Faleth',

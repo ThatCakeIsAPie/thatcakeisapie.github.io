@@ -14,8 +14,8 @@ Pushing to `main` deploys it (see `.github/workflows/deploy.yml`).
 | --- | --- | --- |
 | `/` | `src/pages/index.astro` | Landing (portrait, links, socials), My Story, Goals, Get in touch |
 | `/heroes/` | `src/pages/heroes.astro` | Team Heroes: The Journey (the path and the weekly loop) |
-| `/faleth/` | `src/pages/faleth.astro` | Faleth Capital: what it is, the two buckets, the five steps, and the list of documents |
-| `/faleth/<slug>/` | `src/pages/faleth/[slug].astro` | One page per Faleth Capital document (nine), built from GitHub at build time |
+| `/faleth/` | `src/pages/faleth.astro` | Faleth Capital. Currently a teaser only: `faleth.revealed` in `src/content/site.ts` is `false`. Set it to `true` to publish the full page (what it is, the two buckets, the five steps, the list of documents) |
+| `/faleth/<slug>/` | `src/pages/faleth/[slug].astro` | One page per Faleth Capital document (nine), built from GitHub at build time. Not built while `faleth.revealed` is `false` |
 
 The top bar (`src/components/Header.astro`) is shared: HEROES on the left, the name (home) in the
 centre, FALETH on the right. The current page's tab is underlined and marked `aria-current="page"`.

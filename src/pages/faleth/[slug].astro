@@ -5,6 +5,8 @@ import { site } from '../../content/site';
 import { formatUpdated } from '../../lib/canon-dates';
 
 export async function getStaticPaths() {
+	// Until Faleth Capital is revealed, no document pages are built (see `faleth.revealed` in site.ts).
+	if (!site.faleth.revealed) return [];
 	const docs = (await getCollection('canon')).sort((a, b) => a.data.order - b.data.order);
 	return docs.map((entry, i) => ({
 		params: { slug: entry.id },
