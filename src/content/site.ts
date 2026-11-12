@@ -67,7 +67,7 @@ export const site = {
 		 * Put the file in src/assets/. Leave `null` to show the placeholder frame.
 		 */
 		photo: portrait as ImageMetadata | null,
-		photoAlt: 'Portrait of Lyle Cole',
+		photoAlt: 'Lyle Cole with his wife',
 		photoPlaceholderLabel: 'Photo',
 	},
 
