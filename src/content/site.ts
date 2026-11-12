@@ -73,17 +73,17 @@ export const site = {
 		links: [
 			{
 				title: 'MyShop',
-				description: 'Where I buy my supplements.',
+				description: 'Where I get my supplements and sports nutrition.',
 				href: 'https://www.amway.com/en_US/myshop/ColeHolistics',
 			},
 			{
 				title: 'Avellum Health',
-				description: 'Where I get my peptides.',
+				description: 'Where I get my bloodwork and peptides.',
 				href: 'https://www.avellumhealth.com/',
 			},
 			{
 				title: 'Valdura',
-				description: 'The app I use to monitor my health.',
+				description: 'How I monitor my health.',
 				href: 'https://www.valdura.health/',
 			},
 		] as AffiliateLink[],
