@@ -2,7 +2,7 @@
 
 export type Field = 'name' | 'phone' | 'email' | 'message';
 export type ValidationError = { error: string; field: Field };
-export type Cleaned = { name: string; phone: string; email: string | null; message: string | null };
+export type Cleaned = { name: string; phone: string; email: string | null; message: string };
 
 // C0/C1 control characters plus the Unicode line/paragraph separators.
 const CONTROL = /[\u0000-\u001F\u007F-\u009F\u2028\u2029]/g;
@@ -45,14 +45,10 @@ export function validate(input: { name?: unknown; phone?: unknown; email?: unkno
 		email = emailRaw;
 	}
 
-	// Optional. Absent/null/empty means no message; any other non-string value is rejected rather than guessed at.
-	if (input.message != null && typeof input.message !== 'string') return { error: 'invalid_message', field: 'message' };
-	const messageRaw = cleanLine(input.message);
-	let message: string | null = null;
-	if (messageRaw) {
-		if (length(messageRaw) > MESSAGE_MAX) return { error: 'invalid_message', field: 'message' };
-		message = messageRaw;
-	}
+	// Required: missing, non-string or empty after cleaning is message_required; too long is invalid_message.
+	const message = cleanLine(input.message);
+	if (!message) return { error: 'message_required', field: 'message' };
+	if (length(message) > MESSAGE_MAX) return { error: 'invalid_message', field: 'message' };
 	return { name, phone, email, message };
 }
 

@@ -3,10 +3,10 @@
 Cloudflare Worker behind the contact form on coleholistics.us. `POST /contact` validates, checks a
 Turnstile token, rate-limits per IP hash, stores the submission in D1 and emails a notification to the owner.
 
-- Body: `name`, `phone` (required), `email`, `message` (optional; `message` is one line, at most 300 characters after cleaning:
-  control characters, line/paragraph separators and bidi override characters removed, newlines/tabs become one space;
-  too long gives `400 {error:'invalid_message', field:'message'}`), `token`, plus the `company` honeypot and `elapsedMs`.
-  Requests without `message` still work.
+- Body: `name`, `phone`, `message` (required), `email` (optional), `token`, plus the `company` honeypot and `elapsedMs`.
+  `message` is one line, at most 300 characters after cleaning (control characters, line/paragraph separators and bidi
+  override characters removed, newlines/tabs become one space). Missing, non-string or empty after cleaning gives
+  `400 {error:'message_required', field:'message'}`; too long gives `400 {error:'invalid_message', field:'message'}`.
 - Endpoint: `https://coleholistics-contact.lylecole.workers.dev/contact` (`GET /health` for a liveness check)
 - D1 database: `coleholistics-contact` (binding `DB`), schema in `migrations/`
 - Turnstile widget: `coleholistics.us contact form` (managed; hostnames coleholistics.us, www.coleholistics.us, localhost, 127.0.0.1)

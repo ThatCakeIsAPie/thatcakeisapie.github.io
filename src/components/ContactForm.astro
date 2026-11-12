@@ -27,7 +27,7 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 			<div class="cbar__row2">
 				<div class="field field--message">
 					<label class="sr" for="cf-message">{form.messageLabel}</label>
-					<input id="cf-message" name="message" type="text" autocomplete="off" placeholder={form.messageLabel} maxlength="300" aria-describedby="cf-message-err" />
+					<input id="cf-message" name="message" type="text" autocomplete="off" placeholder={form.messageLabel} required aria-required="true" maxlength="300" aria-describedby="cf-message-err" />
 				</div>
 				<button class="cbar__send" type="submit">{form.button}</button>
 			</div>
@@ -312,6 +312,7 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 				if (!v) return 'phone_required';
 				if (v.length > 40 || !/^\+?\d{7,15}$/.test(v.replace(/[\s\-.()]/g, ''))) return 'phone_invalid';
 			} else if (f === 'message') {
+				if (!v) return 'message_required';
 				if ([...v].length > 300) return 'invalid_message';
 			} else if (v) {
 				if (v.length > 254) return 'email_too_long';
@@ -412,7 +413,7 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 					name: clean(input('name').value),
 					phone: clean(input('phone').value),
 					email: clean(input('email').value),
-					...(message ? { message } : {}),
+					message,
 					company: (form.elements.namedItem('company') as HTMLInputElement).value,
 					token: t,
 					elapsedMs: Date.now() - startedAt,
