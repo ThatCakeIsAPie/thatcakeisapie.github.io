@@ -5,6 +5,7 @@
  * All copy is real and final; no placeholder text remains.
  */
 import type { ImageMetadata } from 'astro';
+import portrait from '../assets/lyle.jpg';
 
 export type SocialId = 'x' | 'instagram' | 'youtube' | 'tiktok' | 'github';
 
@@ -65,7 +66,7 @@ export const site = {
 		 *   photo: portrait,
 		 * Put the file in src/assets/. Leave `null` to show the placeholder frame.
 		 */
-		photo: null as ImageMetadata | null,
+		photo: portrait as ImageMetadata | null,
 		photoAlt: 'Portrait of Lyle Cole',
 		photoPlaceholderLabel: 'Photo',
 	},
