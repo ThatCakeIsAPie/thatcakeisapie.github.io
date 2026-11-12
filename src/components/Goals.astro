@@ -71,7 +71,8 @@ const numerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 		display: grid;
 		grid-template-columns: 5rem minmax(0, 4fr) minmax(0, 5fr);
 		column-gap: 2rem;
-		align-items: baseline;
+		/* Numeral and title sit level with the middle of the sentence, however many lines it runs to. */
+		align-items: center;
 		padding-block: 2.25rem;
 		border-bottom: 1px solid var(--rule);
 	}
@@ -104,9 +105,11 @@ const numerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 	}
 	.working__row {
 		display: grid;
-		grid-template-columns: 5rem minmax(0, 4fr) minmax(0, 5fr) auto;
+		/* Same three columns as the goals ledger above, so the two lists line up. */
+		grid-template-columns: 5rem minmax(0, 4fr) minmax(0, 5fr);
 		column-gap: 2rem;
-		align-items: baseline;
+		/* Marker and name sit level with the middle of the description, however many lines it runs to. */
+		align-items: center;
 		padding-block: 1.35rem;
 		border-bottom: 1px solid var(--rule);
 	}
@@ -115,9 +118,6 @@ const numerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 		height: 0.75rem;
 		border: 1.5px solid var(--gold);
 		border-radius: 50%;
-		/* Sit beside the first line (the name), also when the description runs to several lines. */
-		align-self: start;
-		margin-top: 0.5rem;
 	}
 	.working__name {
 		font-family: var(--font-display);
@@ -140,6 +140,8 @@ const numerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 		display: inline-flex;
 		align-items: center;
 		min-height: 2.75rem;
+		/* An optional link sits under the description. */
+		grid-column: 3;
 	}
 	.working__link:hover {
 		color: var(--gold-light);
