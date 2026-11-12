@@ -171,7 +171,7 @@ export const site = {
 			},
 			{
 				title: 'Family',
-				text: 'My second goal is to create wealth for my family.',
+				text: 'My second goal is to create wealth for my family, so that I can be a present husband to my wife and father to my eventual kids.',
 			},
 			{
 				title: 'Legacy',
