@@ -358,6 +358,38 @@ for (const l of landing.links) {
 		color: var(--text-bright);
 	}
 
+	/* Short desktop viewports (1366x768 laptops): the form bar is two rows tall, so tighten the vertical rhythm of the
+	   columns to keep the whole landing, form note included, on one screen. Tap targets stay >= 44px. */
+	@media (min-width: 901px) and (max-height: 820px) {
+		.landing {
+			padding-top: calc(var(--header-h) + 0.4rem);
+			padding-bottom: 2.25rem;
+		}
+		.landing__grid {
+			row-gap: 0.6rem;
+		}
+		.panel {
+			padding-block: 0.8rem;
+		}
+		.rows {
+			margin-top: 0.35rem;
+		}
+		.row {
+			min-height: 3.1rem;
+			padding-block: 0.25rem;
+		}
+		.find {
+			margin-top: 0.6rem;
+			padding-top: 0.6rem;
+		}
+		.chips {
+			margin-top: 0.5rem;
+		}
+		.who__id {
+			margin-top: 0.75rem;
+		}
+	}
+
 	@media (max-width: 900px) {
 		.landing {
 			padding-top: calc(var(--header-h) + 1.25rem);

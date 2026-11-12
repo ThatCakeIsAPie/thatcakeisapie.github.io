@@ -24,7 +24,13 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 			<div class="hp" aria-hidden="true">
 				<label>{form.honeypotLabel}<input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
 			</div>
-			<button class="cbar__send" type="submit">{form.button}</button>
+			<div class="cbar__row2">
+				<div class="field field--message">
+					<label class="sr" for="cf-message">{form.messageLabel}</label>
+					<input id="cf-message" name="message" type="text" autocomplete="off" placeholder={form.messageLabel} maxlength="300" aria-describedby="cf-message-err" />
+				</div>
+				<button class="cbar__send" type="submit">{form.button}</button>
+			</div>
 			<p class="cbar__note">{form.note}</p>
 		</form>
 		<p class="cbar__success" role="status" tabindex="-1" data-status></p>
@@ -38,6 +44,7 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 		<p class="cbar__err" id="cf-name-err" data-err="name" hidden></p>
 		<p class="cbar__err" id="cf-phone-err" data-err="phone" hidden></p>
 		<p class="cbar__err" id="cf-email-err" data-err="email" hidden></p>
+		<p class="cbar__err" id="cf-message-err" data-err="message" hidden></p>
 		<p class="cbar__err" role="alert" data-form-error hidden>{form.error}</p>
 		<div class="cbar__ts" data-turnstile></div>
 	</div>
@@ -55,10 +62,23 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 	}
 	.cbar__form {
 		display: grid;
-		grid-template-columns: auto repeat(3, minmax(0, 1fr)) auto;
+		grid-template-columns: auto repeat(3, minmax(0, 1fr));
 		align-items: center;
 		column-gap: clamp(0.6rem, 1.2vw, 1rem);
 		row-gap: 0.3rem;
+	}
+	/* Row 2: the free-text field takes the width, Send sits at the right end. */
+	.cbar__row2 {
+		grid-column: 1 / -1;
+		display: flex;
+		align-items: center;
+		gap: clamp(0.6rem, 1.2vw, 1rem);
+	}
+	.field--message {
+		flex: 1;
+	}
+	.cbar__send {
+		flex: none;
 	}
 	.cbar__form[hidden] {
 		display: none;
@@ -155,7 +175,7 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 		cursor: progress;
 	}
 	.cbar__note {
-		grid-column: 2 / -1;
+		grid-column: 1 / -1;
 		font-size: 0.9rem;
 		line-height: 1.35;
 		color: var(--text-dim);
@@ -223,11 +243,22 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 			grid-column: 1 / -1;
 			padding: 0;
 		}
-		.field--email {
-			grid-column: 1;
+		.field--email,
+		.cbar__row2 {
+			grid-column: 1 / -1;
+		}
+		/* Phone: Name + Phone, then Email, then the message field, then Send full width. */
+		.cbar__row2 {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0.6rem;
+		}
+		/* Narrow phones: shrink the long placeholder just enough to show in full (about 301px of text at 16px). */
+		.field--message input {
+			padding-inline: 0.65rem;
+			font-size: clamp(0.8rem, calc((100vw - 6.05rem) * 0.0532), 1rem);
 		}
 		.cbar__send {
-			grid-column: 2;
 			width: 100%;
 			padding-inline: 0.75rem;
 		}
@@ -259,7 +290,7 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 		const formError = root.querySelector<HTMLElement>('[data-form-error]')!;
 		const status = root.querySelector<HTMLElement>('[data-status]')!;
 		const idleLabel = button.textContent ?? '';
-		const fields = ['name', 'phone', 'email'] as const;
+		const fields = ['name', 'phone', 'email', 'message'] as const;
 		type Field = (typeof fields)[number];
 		const input = (f: Field) => form.elements.namedItem(f) as HTMLInputElement;
 		const errEl = (f: Field) => root.querySelector<HTMLElement>(`[data-err=${f}]`)!;
@@ -268,15 +299,20 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 
 		// Same rules as worker/src/validate.ts (the server is authoritative).
 		const CONTROL = /[\u0000-\u001F\u007F-\u009F\u2028\u2029]/g;
-		const clean = (v: string) => v.replace(CONTROL, '').trim();
+		const BIDI = /[\u202A-\u202E\u2066-\u2069]/g;
+		const clean = (v: string) => v.replace(CONTROL, '').replace(BIDI, '').trim();
+		// Free text: newlines/tabs become one space, like the server.
+		const cleanLine = (v: string) => clean(v.replace(/[\t\n\v\f\r\u0085\u2028\u2029]+/g, ' ').replace(/ {2,}/g, ' '));
 		function check(f: Field): string | null {
-			const v = clean(input(f).value);
+			const v = f === 'message' ? cleanLine(input(f).value) : clean(input(f).value);
 			if (f === 'name') {
 				if (!v) return 'name_required';
 				if ([...v].length > 100) return 'name_too_long';
 			} else if (f === 'phone') {
 				if (!v) return 'phone_required';
 				if (v.length > 40 || !/^\+?\d{7,15}$/.test(v.replace(/[\s\-.()]/g, ''))) return 'phone_invalid';
+			} else if (f === 'message') {
+				if ([...v].length > 300) return 'invalid_message';
 			} else if (v) {
 				if (v.length > 254) return 'email_too_long';
 				if (!/^[^\s@<>()[\]\\,;:"]+@[^\s@<>()[\]\\,;:"]+\.[^\s@<>()[\]\\,;:"]{2,}$/.test(v)) return 'email_invalid';
@@ -371,10 +407,12 @@ const clientConfig = JSON.stringify({ endpoint: form.endpoint, siteKey: form.tur
 			try {
 				await loadTurnstile();
 				const t = await nextToken();
+				const message = cleanLine(input('message').value);
 				const body = {
 					name: clean(input('name').value),
 					phone: clean(input('phone').value),
 					email: clean(input('email').value),
+					...(message ? { message } : {}),
 					company: (form.elements.namedItem('company') as HTMLInputElement).value,
 					token: t,
 					elapsedMs: Date.now() - startedAt,

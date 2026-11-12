@@ -11,6 +11,7 @@ export type Submission = {
 	name: string;
 	phone: string;
 	email: string | null;
+	message?: string | null;
 	country: string | null;
 };
 
@@ -26,18 +27,24 @@ export function formatChicago(iso: string): string {
 	}).format(new Date(iso));
 }
 
+/** Body lines of the notification. The message only ever goes into the body, never into a header or the subject. */
+export function notificationLines(s: Submission): string[] {
+	return [
+		`Name: ${s.name}`,
+		`Phone: ${s.phone}`,
+		...(s.email ? [`Email: ${s.email}`] : []),
+		...(s.message ? [`About: ${s.message}`] : []),
+		`Time: ${formatChicago(s.createdAt)}`,
+		`Country: ${s.country ?? 'unknown'}`,
+	];
+}
+
 export async function notify(env: Env, s: Submission): Promise<boolean> {
 	const to = env.NOTIFY_TO;
 	const from = env.NOTIFY_FROM;
 	if (!env.EMAIL || !to || !from) return false;
 	try {
-		const lines = [
-			`Name: ${s.name}`,
-			`Phone: ${s.phone}`,
-			...(s.email ? [`Email: ${s.email}`] : []),
-			`Time: ${formatChicago(s.createdAt)}`,
-			`Country: ${s.country ?? 'unknown'}`,
-		];
+		const lines = notificationLines(s);
 		await env.EMAIL.send({
 			to,
 			from,

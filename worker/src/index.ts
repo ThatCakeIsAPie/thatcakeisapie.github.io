@@ -162,11 +162,11 @@ async function handleContact(request: Request, env: Env, ctx: ExecutionContext):
 	try {
 		// One statement: insert only while this client is under the limit (no check-then-insert race).
 		const res = await env.DB.prepare(
-			`INSERT INTO submissions (id, created_at, name, phone, email, country, ip_hash)
-			 SELECT ?1, ?2, ?3, ?4, ?5, ?6, ?7
+			`INSERT INTO submissions (id, created_at, name, phone, email, country, ip_hash, message)
+			 SELECT ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?10
 			 WHERE (SELECT COUNT(*) FROM submissions WHERE ip_hash = ?7 AND created_at > ?8) < ?9`,
 		)
-			.bind(id, createdAt, cleaned.name, cleaned.phone, cleaned.email, country, hash, since, RATE_LIMIT)
+			.bind(id, createdAt, cleaned.name, cleaned.phone, cleaned.email, country, hash, since, RATE_LIMIT, cleaned.message)
 			.run();
 		if (res.meta.changes === 0) {
 			log('contact', { outcome: 'rate_limited' });

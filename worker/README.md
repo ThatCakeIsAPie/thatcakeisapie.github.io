@@ -3,6 +3,10 @@
 Cloudflare Worker behind the contact form on coleholistics.us. `POST /contact` validates, checks a
 Turnstile token, rate-limits per IP hash, stores the submission in D1 and emails a notification to the owner.
 
+- Body: `name`, `phone` (required), `email`, `message` (optional; `message` is one line, at most 300 characters after cleaning:
+  control characters, line/paragraph separators and bidi override characters removed, newlines/tabs become one space;
+  too long gives `400 {error:'invalid_message', field:'message'}`), `token`, plus the `company` honeypot and `elapsedMs`.
+  Requests without `message` still work.
 - Endpoint: `https://coleholistics-contact.lylecole.workers.dev/contact` (`GET /health` for a liveness check)
 - D1 database: `coleholistics-contact` (binding `DB`), schema in `migrations/`
 - Turnstile widget: `coleholistics.us contact form` (managed; hostnames coleholistics.us, www.coleholistics.us, localhost, 127.0.0.1)
@@ -31,7 +35,7 @@ for the sender's domain.
   address is verified as a destination (`npx wrangler email routing addresses list`).
 - `wrangler.jsonc` has `"send_email": [{ "name": "EMAIL" }]` and the var `NOTIFY_FROM`.
 - `src/notify.ts` calls `env.EMAIL.send({ to, from, subject, text, replyTo? })` (plain text, subject
-  `New contact: <name>`, `Reply-To` set when the submitter gave an email). On success the row gets `notified = 1`.
+  `New contact: <name>`, an `About: <message>` line when the visitor gave one (body only, never a header), `Reply-To` set when the submitter gave an email). On success the row gets `notified = 1`.
   Errors are caught and logged as an error code plus a redacted message; a failed email never fails the submission.
 - The recipient is the secret `NOTIFY_TO`. Set it without echoing it:
   `npx wrangler email routing addresses list | grep -Eo '[[:alnum:]._%+-]+@[[:alnum:].-]+' | head -1 | tr -d '\n' | npx wrangler secret put NOTIFY_TO`
@@ -59,5 +63,5 @@ Point the site at it with `PUBLIC_CONTACT_ENDPOINT=http://127.0.0.1:8799/contact
 ## Reading submissions
 
 ```
-npx wrangler d1 execute DB --remote --command "SELECT created_at, name, phone, email, country, notified FROM submissions ORDER BY created_at DESC LIMIT 20"
+npx wrangler d1 execute DB --remote --command "SELECT created_at, name, phone, email, message, country, notified FROM submissions ORDER BY created_at DESC LIMIT 20"
 ```
