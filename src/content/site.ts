@@ -181,22 +181,19 @@ export const site = {
 		workingLabel: 'What I am working on',
 		working: [
 			{
-				// PLACEHOLDER
-				name: 'Lorem Ipsum',
-				description: 'Dolor sit amet consectetur adipiscing elit.',
+				name: 'Health',
+				description: 'Helping people live healthy through the vendors I’m affiliated with, linked above.',
 				link: null,
 			},
 			{
-				// PLACEHOLDER
-				name: 'Dolor Sit',
-				description: 'Sed do eiusmod tempor incididunt ut labore.',
+				name: 'People',
+				description: 'Developing others to the point they no longer need me.',
 				link: null,
 			},
 			{
-				// PLACEHOLDER
-				name: 'Amet Elit',
-				description: 'Ut enim ad minim veniam quis nostrud.',
-				link: null,
+				name: 'Ownership',
+				description: 'Building businesses where people earn in proportion to the useful work they create, with ownership and equity for doing it. The goal is that they get wealthy and the business no longer needs me day to day.',
+				link: '/faleth/',
 			},
 		] as Project[],
 		linkLabel: 'Visit',
