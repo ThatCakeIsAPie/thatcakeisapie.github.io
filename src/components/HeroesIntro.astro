@@ -5,9 +5,9 @@ import SectionHeading from './SectionHeading.astro';
 const h = site.heroes;
 ---
 
-<section class="intro" aria-labelledby="journey-title">
+<section class="intro" aria-labelledby="heroes-title">
 	<div class="wrap slab glass glass--reading intro__panel">
-		<SectionHeading label={h.label} title={h.heading} intro={h.intro} id="journey-title" h1 />
+		<SectionHeading label={h.label} title={h.heading} intro={h.intro} id="heroes-title" h1 />
 	</div>
 </section>
 
@@ -16,19 +16,19 @@ const h = site.heroes;
 		padding-top: calc(var(--header-h) + var(--panel-gap));
 		margin-bottom: var(--panel-gap);
 	}
-	/* The header panel is just the title and one paragraph: narrower than the other panels, generous padding, no trailing gap. */
+	/* Compact title panel so the WHY statement lands in the first desktop viewport. */
 	.intro__panel {
 		width: min(100% - 2 * var(--gutter), 56rem);
-		padding-block: clamp(2.5rem, 6vw, 5rem);
+		padding-block: clamp(1.75rem, 3.5vw, 2.75rem);
 	}
 	.intro :global(.sh) {
 		margin-bottom: 0;
-		gap: clamp(1.25rem, 2.5vw, 2rem);
+		gap: clamp(0.9rem, 1.6vw, 1.25rem);
 	}
 	.intro :global(.sh__intro) {
-		max-width: 38rem;
 		font-weight: 300;
-		font-size: clamp(1.15rem, 2vw, 1.35rem);
-		line-height: 1.6;
+		font-size: 1.05rem;
+		letter-spacing: 0.04em;
+		color: var(--text-dim);
 	}
 </style>

@@ -1,0 +1,75 @@
+---
+import { site } from '../content/site';
+import SectionHeading from './SectionHeading.astro';
+
+const { label, intro, steps } = site.heroes.framework;
+const numerals = ['I', 'II', 'III', 'IV'];
+---
+
+<section class="fw" aria-labelledby="fw-h">
+	<div class="wrap slab glass glass--reading">
+		<SectionHeading label={label} id="fw-h" />
+		<p class="fw__intro reveal">{intro}</p>
+		<ol class="path fw__path">
+			{
+				steps.map((t, i) => (
+					<li class="path__item reveal">
+						<span class:list={['node', i === steps.length - 1 && 'node--filled']} aria-hidden="true">
+							{numerals[i]}
+						</span>
+						<p class="step">{t}</p>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</section>
+
+<style>
+	.fw {
+		margin-bottom: var(--panel-gap);
+	}
+	.fw :global(.sh) {
+		margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
+	}
+	.fw__intro {
+		max-width: 28ch;
+		margin: 0 auto clamp(2.5rem, 5vw, 3.75rem);
+		text-align: center;
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: clamp(1.5rem, 3.4vw, 2.5rem);
+		line-height: 1.2;
+		letter-spacing: 0.03em;
+		color: var(--text-bright);
+		text-wrap: balance;
+	}
+	.fw__path {
+		--node: clamp(3rem, 5vw, 3.75rem);
+		width: fit-content;
+		max-width: 100%;
+		margin-inline: auto;
+	}
+	.path__item {
+		align-items: start;
+		column-gap: clamp(1.25rem, 3vw, 2.5rem);
+		padding-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
+	}
+	.path__item:last-child {
+		padding-bottom: 0;
+	}
+	.step {
+		padding-top: max(0px, calc((var(--node) - 1.3em) / 2));
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: clamp(1.15rem, 2.3vw, 1.75rem);
+		line-height: 1.3;
+		letter-spacing: 0.02em;
+		color: var(--gold-light);
+	}
+	@media (max-width: 480px) {
+		.fw__path {
+			--node: 2.75rem;
+		}
+	}
+</style>

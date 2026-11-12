@@ -250,19 +250,45 @@ export const site = {
 	/** /heroes/ : real copy, used as written. No figures, no pin levels, no testimonials. */
 	heroes: {
 		title: 'Heroes · Lyle Cole',
-		description: 'Personal site of Lyle Cole.',
-		label: 'Team Heroes',
-		heading: 'The Journey',
-		intro:
-			'Heroes is my network marketing team. The name comes from the hero’s journey: each person is the hero of their own growth story, and the team is the dojo where they train.',
-		code: {
-			label: 'The Code',
-			lines: [
-				'Fruit first.',
-				'Customers before team.',
-				'The door stays open.',
-				'Give away what scales.',
-				'Be here by choice.',
+		description: 'Heroes is my network marketing team. It exists to build indestructible business leaders.',
+		label: 'TEAM HEROES',
+		heading: 'HEROES',
+		intro: 'My network marketing team.',
+		why: {
+			label: 'WHY IT EXISTS',
+			statement: 'To build indestructible business leaders.',
+			text: 'We do it by helping you build a business of your own that you run, and by getting you plugged into rooms where you’re surrounded by like-minded people, growing through opt-in accountability and one-on-one mentorship.',
+		},
+		get: {
+			label: 'WHAT YOU GET',
+			items: [
+				{ title: 'A BUSINESS OF YOUR OWN', text: 'One that you run.' },
+				{ title: 'THE ROOM', text: 'Surrounded by like-minded people.' },
+				{ title: 'ACCOUNTABILITY', text: 'Opt-in. You choose it.' },
+				{ title: 'MENTORSHIP', text: 'One on one.' },
+			],
+		},
+		framework: {
+			label: 'THE FRAMEWORK',
+			intro: 'Our framework is universal.',
+			steps: ['Where you are.', 'Where you want to go.', 'What’s blocking the way.', 'Removing it.'],
+		},
+		name: {
+			label: 'THE NAME',
+			text: 'The name comes from the hero’s journey: you are the hero of your own growth story, and the team is the dojo where you train.',
+		},
+		rules: {
+			label: 'GROUND RULES',
+			items: [
+				{
+					title: 'THE DOOR STAYS OPEN',
+					text: 'When people can leave anytime, they’re more likely to stay. One group has customers, the other has hostages, and only one sends referrals.',
+				},
+				{ title: 'RESULTS OVER INFORMATION', text: 'Information is a commodity. Results are the signal.' },
+				{
+					title: 'NO HYPE',
+					text: 'No income claims, lifestyle hype, fake testimonials or invented results. Nobody is pushed to go all-in.',
+				},
 			],
 		},
 		looking: {

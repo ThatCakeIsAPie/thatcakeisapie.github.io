@@ -1,0 +1,51 @@
+---
+import { site } from '../content/site';
+import SectionHeading from './SectionHeading.astro';
+
+const { label, statement, text } = site.heroes.why;
+---
+
+<section class="why" aria-labelledby="why-h">
+	<div class="wrap slab slab--why glass glass--reading">
+		<SectionHeading label={label} id="why-h" />
+		<p class="why__statement reveal">{statement}</p>
+		<p class="why__text reveal">{text}</p>
+	</div>
+</section>
+
+<style>
+	.why {
+		margin-bottom: var(--panel-gap);
+	}
+	/* The page's strongest moment: the roomiest panel with a gold hairline. */
+	.slab--why {
+		padding-block: clamp(2.5rem, 5.5vw, 5rem);
+		border-color: rgba(227, 194, 113, 0.35);
+	}
+	.why :global(.sh) {
+		margin-bottom: clamp(2rem, 4vw, 3.25rem);
+	}
+	.why__statement {
+		max-width: 24ch;
+		margin-inline: auto;
+		text-align: center;
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: clamp(2.2rem, 5.2vw, 4.4rem);
+		line-height: 1.1;
+		letter-spacing: 0.03em;
+		color: var(--text-bright);
+		text-wrap: balance;
+	}
+	.why__text {
+		max-width: 40rem;
+		margin: clamp(2rem, 4vw, 3.25rem) auto 0;
+		padding-top: clamp(1.5rem, 3vw, 2.25rem);
+		border-top: 1px solid var(--gold-deep);
+		text-align: center;
+		font-weight: 300;
+		font-size: clamp(1.05rem, 1.7vw, 1.25rem);
+		line-height: 1.7;
+		text-wrap: balance;
+	}
+</style>

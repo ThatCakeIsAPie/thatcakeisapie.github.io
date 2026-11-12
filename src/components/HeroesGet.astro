@@ -1,0 +1,87 @@
+---
+import { site } from '../content/site';
+import SectionHeading from './SectionHeading.astro';
+
+const { label, items } = site.heroes.get;
+---
+
+<section class="get" aria-labelledby="get-h">
+	<div class="wrap slab glass glass--reading">
+		<SectionHeading label={label} id="get-h" />
+		<ul class="get__list">
+			{
+				items.map((d) => (
+					<li class="entry reveal">
+						<h3 class="entry__title">{d.title}</h3>
+						<p class="entry__text">{d.text}</p>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.get {
+		margin-bottom: var(--panel-gap);
+	}
+	.get :global(.sh) {
+		margin-bottom: clamp(2rem, 4vw, 3rem);
+	}
+	/* Two columns of ruled entries: the longest title (ACCOUNTABILITY) needs more than a quarter of the panel. */
+	.get__list {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		border-top: 1px solid var(--gold-deep);
+	}
+	.entry {
+		display: flex;
+		flex-direction: column;
+		gap: 0.9rem;
+		padding: clamp(1.75rem, 3vw, 2.5rem) clamp(1.25rem, 3vw, 3rem);
+	}
+	.entry:nth-child(odd) {
+		padding-left: 0;
+	}
+	.entry:nth-child(even) {
+		padding-right: 0;
+		border-left: 1px solid var(--rule);
+	}
+	.entry:nth-child(n + 3) {
+		border-top: 1px solid var(--rule);
+		padding-bottom: 0;
+	}
+	.entry__title {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: clamp(1.2rem, 2.2vw, 1.75rem);
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		line-height: 1.25;
+		color: var(--gold);
+		text-wrap: balance;
+	}
+	.entry__text {
+		font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+		font-weight: 300;
+		line-height: 1.5;
+		color: var(--text-bright);
+	}
+	@media (max-width: 640px) {
+		.get__list {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.entry,
+		.entry:nth-child(odd),
+		.entry:nth-child(even) {
+			padding: 1.5rem 0;
+			border-left: 0;
+		}
+		.entry + .entry {
+			border-top: 1px solid var(--rule);
+		}
+		.entry:last-child {
+			padding-bottom: 0;
+		}
+	}
+</style>
